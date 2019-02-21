@@ -8,11 +8,13 @@ public class Scheduler
 
     private Process[] processes;
     private Scheduling scheduling;
+    private Process runningProcess;
 
     public Scheduler(Scheduling scheduling, int slots)
     {
         this.scheduling = scheduling;
         processes = new Process[slots];
+        runningProcess = null;
     }
 
     public Process[] GetProcesses()
@@ -32,14 +34,65 @@ public class Scheduler
         return false;
     }
 
-    public void Run()
+    private void RemoveRunningProcess()
+    {
+        for (int i = 0; i < processes.Length; i++)
+        {
+            if (processes[i] == runningProcess)
+            {
+                processes[i] = null;
+                break;
+            }
+        }
+        runningProcess = null;
+    }
+
+    public void Run(float timePassed)
+    {
+        if (runningProcess == null && processes.Length > 0)
+        {
+            AttributeProcess();
+        } 
+        else
+        {
+            float overTime = runningProcess.Consume(timePassed);
+            
+            if (runningProcess.GetState() == Process.State.Terminated)
+            {
+                RemoveRunningProcess();
+            }
+        }
+
+        /*switch (scheduling)
+        {
+            case Scheduling.FCFS:
+                break;
+        }*/
+
+    }
+
+    private void AttributeProcess()
     {
         switch (scheduling)
         {
             case Scheduling.FCFS:
-            break;
+                Process firstProcess = null;
+                float firstArrival = float.MaxValue;
+                for (int i = 0; i < processes.Length; i++)
+                {
+                    if (processes[i] != null && processes[i].Arrival < firstArrival)
+                    {
+                        firstProcess = processes[i];
+                        firstArrival = firstProcess.Arrival;
+                    }
+                }
+                if (firstProcess != null)
+                {
+                    runningProcess = firstProcess;
+                    runningProcess.Start();
+                }
+                break;
         }
-
     }
 
 }

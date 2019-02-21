@@ -14,6 +14,7 @@ public class Process
     private State state;
     private GameObject gameObject;
     private GameObject prefab;
+    private const float SIZE_RATIO = 3.0f;
 
     public Process(GameObject prefab, string name, float arrival, float duration)
     {
@@ -25,6 +26,11 @@ public class Process
         state = State.New;
     }
 
+    public State GetState()
+    {
+        return state;
+    }
+
     public void Place(Vector3 pos)
     {
         gameObject.transform.position = pos;
@@ -33,10 +39,31 @@ public class Process
     public void Admit()
     {
         gameObject = Object.Instantiate(prefab) as GameObject;
-        gameObject.transform.localScale = new Vector3(1f, 0.2f * Duration, 1f);
+        gameObject.transform.localScale = new Vector3(1f, SIZE_RATIO * Duration, 1f);
         gameObject.transform.parent = GameObject.Find("Processes").transform;
         gameObject.name = Name;
         state = State.Ready;
+    }
+
+    public void Start()
+    {
+        state = State.Running;
+    }
+
+    public float Consume(float time)
+    {
+        Progress += time;
+        if (Progress >= Duration)
+        {
+            Object.Destroy(gameObject);
+            state = State.Terminated;
+            return Progress - Duration;
+        }
+        else
+        {
+            gameObject.transform.localScale = new Vector3(1f, SIZE_RATIO * Duration - SIZE_RATIO * (Progress / Duration) * Duration, 1f);
+            return 0f;
+        }
     }
 
     public void Interrupt()
