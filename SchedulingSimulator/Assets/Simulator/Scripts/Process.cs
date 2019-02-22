@@ -14,7 +14,7 @@ public class Process
     private State state;
     private GameObject gameObject;
     private GameObject prefab;
-    private const float SIZE_RATIO = 3.0f;
+    private const float SIZE_RATIO = 0.2f;
 
     public Process(GameObject prefab, string name, float arrival, float duration)
     {
@@ -22,7 +22,7 @@ public class Process
         Name = name;
         Arrival = arrival;
         Duration = duration;
-        Progress = 0;
+        Progress = duration;
         state = State.New;
     }
 
@@ -52,16 +52,16 @@ public class Process
 
     public float Consume(float time)
     {
-        Progress += time;
-        if (Progress >= Duration)
+        Progress -= time;
+        if (Progress <= 0)
         {
             Object.Destroy(gameObject);
             state = State.Terminated;
-            return Progress - Duration;
+            return -Duration;
         }
         else
         {
-            gameObject.transform.localScale = new Vector3(1f, SIZE_RATIO * Duration - SIZE_RATIO * (Progress / Duration) * Duration, 1f);
+            gameObject.transform.localScale = new Vector3(1f, SIZE_RATIO * Progress, 1f);
             return 0f;
         }
     }

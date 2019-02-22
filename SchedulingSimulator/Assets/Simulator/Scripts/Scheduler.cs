@@ -29,6 +29,10 @@ public class Scheduler
             process.Admit();
             process.Place(new Vector3(1.5f * index, 0f, 0f));
             processes[index] = process;
+            if (scheduling == Scheduling.SJFP)
+            {   
+                AttributeProcess();
+            }
             return true;
         }
         return false;
@@ -63,16 +67,10 @@ public class Scheduler
             }
         }
 
-        /*switch (scheduling)
-        {
-            case Scheduling.FCFS:
-                break;
-        }*/
-
     }
 
     private void AttributeProcess()
-    {
+    { 
         switch (scheduling)
         {
             case Scheduling.FCFS:
@@ -89,6 +87,44 @@ public class Scheduler
                 if (firstProcess != null)
                 {
                     runningProcess = firstProcess;
+                    runningProcess.Start();
+                }
+                break;
+            case Scheduling.SJFNP:
+                Process smallerProcess = null;
+                float smallerDuration = float.MaxValue;
+                for (int i = 0; i < processes.Length; i++)
+                {
+                    if (processes[i] != null && processes[i].Duration < smallerDuration)
+                    {
+                        smallerProcess = processes[i];
+                        smallerDuration = smallerProcess.Duration;
+                    }
+                }
+                if (smallerProcess != null)
+                {
+                    runningProcess = smallerProcess;
+                    runningProcess.Start();
+                }
+                break;
+            case Scheduling.SJFP:
+                Process progressProcess = null;
+                float smallerProgression = float.MaxValue;
+                for (int i = 0; i < processes.Length; i++)
+                {
+                    if (processes[i] != null && processes[i].Progress < smallerProgression)
+                    {
+                        progressProcess = processes[i];
+                        smallerProgression = progressProcess.Progress;
+                    }
+                }
+                if (progressProcess != null)
+                {
+                    if (runningProcess != null)
+                    {
+                        runningProcess.Interrupt();
+                    }
+                    runningProcess = progressProcess;
                     runningProcess.Start();
                 }
                 break;

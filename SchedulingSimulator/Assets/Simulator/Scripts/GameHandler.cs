@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameHandler : MonoBehaviour
 {
     public GameObject processPrefab;
+    public Scheduler.Scheduling scheduling;
     public int slots;
 
     private float timePassed;
@@ -16,7 +17,7 @@ public class GameHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scheduler = new Scheduler(Scheduler.Scheduling.FCFS, slots);
+        scheduler = new Scheduler(scheduling, slots);
         processes = new List<Process>();
 
         processesObjects = new GameObject
@@ -26,7 +27,7 @@ public class GameHandler : MonoBehaviour
 
         firstTime = true;
 
-        GenerateComplexProcesses();
+        GenerateSimpleProcesses();
     }
 
     private void GenerateSimpleProcesses()

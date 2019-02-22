@@ -143,7 +143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   processPrefab: {fileID: 5356127647792737839, guid: 72159ecf4ed613e41ba35f669c6088ed,
     type: 3}
-  slots: 3
+  scheduling: 1
+  slots: 4
 --- !u!4 &50297426
 Transform:
   m_ObjectHideFlags: 0
