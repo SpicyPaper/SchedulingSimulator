@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameHandler : MonoBehaviour
 {
     public Transform SpawnPoint;
+    public GameObject Plateform;
     public GameObject processPrefab;
     public Scheduler.Scheduling scheduling;
     public int slots;
@@ -30,20 +31,28 @@ public class GameHandler : MonoBehaviour
 
         firstTime = true;
 
-        GenerateComplexProcesses();
+        GeneratorRandomProcesses();
+    }
+
+    public void GeneratorRandomProcesses()
+    {
+        for (int i = 0; i < 16; i++)
+        {
+            processes.Add(new Process(processPrefab, Plateform, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
+        }
     }
 
     private void GenerateSimpleProcesses()
     {
-        processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
+        /*processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
         processes.Add(new Process(processPrefab, "P2", 2.0f, 4.0f));
         processes.Add(new Process(processPrefab, "P3", 4.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P4", 5.0f, 4.0f));
+        processes.Add(new Process(processPrefab, "P4", 5.0f, 4.0f));*/
     }
 
     private void GenerateComplexProcesses()
     {
-        processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
+        /*processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
         processes.Add(new Process(processPrefab, "P2", 2.0f, 4.0f));
         processes.Add(new Process(processPrefab, "P3", 4.0f, 1.0f));
         processes.Add(new Process(processPrefab, "P4", 5.0f, 4.0f));
@@ -58,7 +67,7 @@ public class GameHandler : MonoBehaviour
         processes.Add(new Process(processPrefab, "P13", 19.0f, 4.0f));
         processes.Add(new Process(processPrefab, "P14", 20.0f, 5.0f));
         processes.Add(new Process(processPrefab, "P15", 22.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P16", 25.0f, 2.0f));
+        processes.Add(new Process(processPrefab, "P16", 25.0f, 2.0f));*/
     }
 
     // Update is called once per frame
@@ -85,6 +94,8 @@ public class GameHandler : MonoBehaviour
                     processes.Remove(process);
                 }
             }
+
+            process.Update();
         }
 
         scheduler.Run(deltaTime);

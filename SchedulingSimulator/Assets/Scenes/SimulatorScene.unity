@@ -581,6 +581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnPoint: {fileID: 1359982423}
+  Plateform: {fileID: 0}
   processPrefab: {fileID: 7214303512669827698, guid: e9fb4c8a5008ea542b8428f149848c45,
     type: 3}
   scheduling: 3

@@ -13,12 +13,15 @@ public class Process
 
     private State state;
     private GameObject gameObject;
+    private GameObject plateform;
     private readonly GameObject prefab;
     private const float SIZE_RATIO = 0.2f;
 
-    public Process(GameObject prefab, string name, float arrival, float duration)
+    public Process(GameObject prefab, GameObject plateform, string name, float arrival, float duration)
     {
         this.prefab = prefab;
+        this.plateform = plateform;
+
         Name = name;
         Arrival = arrival;
         Duration = duration;
@@ -42,12 +45,22 @@ public class Process
         gameObject.transform.localScale = new Vector3(0.4f, SIZE_RATIO * Duration, 0.4f);
         gameObject.transform.parent = GameObject.Find("Processes").transform;
         gameObject.name = Name;
-        state = State.Ready;
     }
 
     public void Start()
     {
         state = State.Running;
+    }
+
+    public void Update()
+    {
+        if(state == State.New &&
+            gameObject != null &&
+            gameObject.transform.position.y - gameObject.transform.localScale.y / 2 < -2)
+        {
+            Debug.Log(gameObject.transform.position.y - gameObject.transform.localScale.y / 2);
+            state = State.Ready;
+        }
     }
 
     public float Consume(float time)
