@@ -51,7 +51,7 @@ public class GameHandler : MonoBehaviour
         processes.Add(new Process(processPrefab, "P6", 8.0f, 8.0f));
         processes.Add(new Process(processPrefab, "P7", 11.0f, 1.0f));
         processes.Add(new Process(processPrefab, "P8", 12.0f, 2.0f));
-        processes.Add(new Process(processPrefab, "P9", 13.0f, 12.0f));
+        processes.Add(new Process(processPrefab, "P9", 13.0f, 10.0f));
         processes.Add(new Process(processPrefab, "P10", 13.0f, 4.0f));
         processes.Add(new Process(processPrefab, "P11", 15.0f, 2.0f));
         processes.Add(new Process(processPrefab, "P12", 18.0f, 6.0f));
