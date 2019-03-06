@@ -6,6 +6,7 @@ public class ConveyorDetector : MonoBehaviour
 {
     public bool IsStartDetector;
     public GameObject PusherModel;
+    public GameObject Parent;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -23,6 +24,7 @@ public class ConveyorDetector : MonoBehaviour
             {
                 GameObject pusher = Instantiate(PusherModel);
                 pusher.transform.position = transform.position + transform.forward * -0.5f;
+                pusher.transform.parent = Parent.transform;
             }
         }
     }
