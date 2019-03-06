@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
+    public Transform SpawnPoint;
     public GameObject processPrefab;
     public Scheduler.Scheduling scheduling;
     public int slots;
@@ -19,7 +20,7 @@ public class GameHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scheduler = new Scheduler(scheduling, slots, quantum);
+        scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
 
         processesObjects = new GameObject

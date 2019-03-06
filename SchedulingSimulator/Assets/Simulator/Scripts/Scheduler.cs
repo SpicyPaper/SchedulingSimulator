@@ -6,6 +6,7 @@ public class Scheduler
 {
     public enum Scheduling { FIRST_COME_FIRST_SERVED, SHORTEST_JOB_FIRST_PREEMPTIVE, SHORTEST_JOB_FIRST_NON_PREEMTIVE, ROUND_ROBIN };
 
+    private Transform spawnPoint;
     private Process[] processes;
     private List<Process> FIFO;
     private Process runningProcess;
@@ -14,11 +15,14 @@ public class Scheduler
     private int indexRR;
     private float timeInRR;
     private int counter;
+    private const float SPACING = 1.24f;
 
-    public Scheduler(Scheduling scheduling, int slots, double quantum)
+    public Scheduler(Scheduling scheduling, int slots, double quantum, Transform spawnPoint)
     {
         this.scheduling = scheduling;
         this.quantum = quantum;
+        this.spawnPoint = spawnPoint;
+
         processes = new Process[slots];
         FIFO = new List<Process>();
         runningProcess = null;
@@ -37,7 +41,7 @@ public class Scheduler
         if (processes[index] == null)
         {
             process.Admit();
-            process.Place(new Vector3(1.5f * index, 0f, 0f));
+            process.Place(spawnPoint.position + Vector3.right * SPACING * index);
             processes[index] = process;
 
             if (scheduling == Scheduling.SHORTEST_JOB_FIRST_PREEMPTIVE)

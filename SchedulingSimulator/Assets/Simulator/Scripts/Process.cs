@@ -39,7 +39,7 @@ public class Process
     public void Admit()
     {
         gameObject = Object.Instantiate(prefab) as GameObject;
-        gameObject.transform.localScale = new Vector3(1f, SIZE_RATIO * Duration, 1f);
+        gameObject.transform.localScale = new Vector3(0.4f, SIZE_RATIO * Duration, 0.4f);
         gameObject.transform.parent = GameObject.Find("Processes").transform;
         gameObject.name = Name;
         state = State.Ready;
@@ -61,7 +61,7 @@ public class Process
         }
         else
         {
-            gameObject.transform.localScale = new Vector3(1f, SIZE_RATIO * Progress, 1f);
+            gameObject.transform.localScale = new Vector3(0.4f, SIZE_RATIO * Progress, 0.4f);
             return 0f;
         }
     }
