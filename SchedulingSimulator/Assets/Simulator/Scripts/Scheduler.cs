@@ -4,17 +4,27 @@ using UnityEngine;
 
 public class Scheduler
 {
-    public enum Scheduling { FCFS, SJFP, SJFNP, RR };
+    public enum Scheduling { FIRST_COME_FIRST_SERVED, SHORTEST_JOB_FIRST_PREEMPTIVE, SHORTEST_JOB_FIRST_NON_PREEMTIVE, ROUND_ROBIN };
 
     private Process[] processes;
-    private Scheduling scheduling;
+    private List<Process> FIFO;
     private Process runningProcess;
+    private readonly Scheduling scheduling;
+    private readonly double quantum;
+    private int indexRR;
+    private float timeInRR;
+    private int counter;
 
-    public Scheduler(Scheduling scheduling, int slots)
+    public Scheduler(Scheduling scheduling, int slots, double quantum)
     {
         this.scheduling = scheduling;
+        this.quantum = quantum;
         processes = new Process[slots];
+        FIFO = new List<Process>();
         runningProcess = null;
+        indexRR = 0;
+        timeInRR = 0f;
+        counter = 0;
     }
 
     public Process[] GetProcesses()
@@ -29,9 +39,14 @@ public class Scheduler
             process.Admit();
             process.Place(new Vector3(1.5f * index, 0f, 0f));
             processes[index] = process;
-            if (scheduling == Scheduling.SJFP)
+
+            if (scheduling == Scheduling.SHORTEST_JOB_FIRST_PREEMPTIVE)
             {   
                 AttributeProcess();
+            }
+            if (scheduling == Scheduling.ROUND_ROBIN)
+            {
+                FIFO.Add(process);
             }
             return true;
         }
@@ -48,7 +63,36 @@ public class Scheduler
                 break;
             }
         }
+        if (scheduling == Scheduling.ROUND_ROBIN)
+        {
+            indexRR--;
+            if (indexRR < 0)
+            {
+                indexRR = 0;
+            }
+            timeInRR = 0;
+            FIFO.Remove(runningProcess);
+        }
         runningProcess = null;
+    }
+
+    private void DrawFIFO()
+    {
+        counter++;
+        string fifo = "|";
+        for (int i = 0; i < FIFO.Count; i++)
+        {
+            fifo += FIFO[i].Name + "|";
+        }
+        Debug.Log(counter + ": " + fifo);
+        string pointer = "";
+        for (int i = 0; i < indexRR; i++)
+        {
+            pointer += "     ";
+        }
+        pointer += " ^";
+        Debug.Log(counter + ": " + pointer);
+        Debug.Log(counter + ": " + indexRR);
     }
 
     public void Run(float timePassed)
@@ -59,11 +103,33 @@ public class Scheduler
         } 
         else
         {
+            //DrawFIFO();
             float overTime = runningProcess.Consume(timePassed);
+            bool attribute = false;
+
+            if (scheduling == Scheduling.ROUND_ROBIN)
+            {
+                timeInRR += timePassed;
+                if (timeInRR >= quantum)
+                {
+                    timeInRR = 0f;
+                    indexRR++;
+                    if (indexRR >= FIFO.Count)
+                    {
+                        indexRR = 0;
+                    }
+                    attribute = true;
+                }
+            }
             
             if (runningProcess.GetState() == Process.State.Terminated)
             {
                 RemoveRunningProcess();
+            }
+
+            if (attribute)
+            {
+                AttributeProcess();
             }
         }
 
@@ -73,7 +139,7 @@ public class Scheduler
     { 
         switch (scheduling)
         {
-            case Scheduling.FCFS:
+            case Scheduling.FIRST_COME_FIRST_SERVED:
                 Process firstProcess = null;
                 float firstArrival = float.MaxValue;
                 for (int i = 0; i < processes.Length; i++)
@@ -90,7 +156,7 @@ public class Scheduler
                     runningProcess.Start();
                 }
                 break;
-            case Scheduling.SJFNP:
+            case Scheduling.SHORTEST_JOB_FIRST_NON_PREEMTIVE:
                 Process smallerProcess = null;
                 float smallerDuration = float.MaxValue;
                 for (int i = 0; i < processes.Length; i++)
@@ -107,7 +173,7 @@ public class Scheduler
                     runningProcess.Start();
                 }
                 break;
-            case Scheduling.SJFP:
+            case Scheduling.SHORTEST_JOB_FIRST_PREEMPTIVE:
                 Process progressProcess = null;
                 float smallerProgression = float.MaxValue;
                 for (int i = 0; i < processes.Length; i++)
@@ -126,6 +192,12 @@ public class Scheduler
                     }
                     runningProcess = progressProcess;
                     runningProcess.Start();
+                }
+                break;
+            case Scheduling.ROUND_ROBIN:
+                if (FIFO.Count > 0 && indexRR >= 0 && indexRR < FIFO.Count)
+                {
+                    runningProcess = FIFO[indexRR];
                 }
                 break;
         }

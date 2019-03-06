@@ -7,6 +7,8 @@ public class GameHandler : MonoBehaviour
     public GameObject processPrefab;
     public Scheduler.Scheduling scheduling;
     public int slots;
+    public float quantum;
+    public float speed;
 
     private float timePassed;
     private Scheduler scheduler;
@@ -17,7 +19,7 @@ public class GameHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scheduler = new Scheduler(scheduling, slots);
+        scheduler = new Scheduler(scheduling, slots, quantum);
         processes = new List<Process>();
 
         processesObjects = new GameObject
@@ -27,7 +29,7 @@ public class GameHandler : MonoBehaviour
 
         firstTime = true;
 
-        GenerateSimpleProcesses();
+        GenerateComplexProcesses();
     }
 
     private void GenerateSimpleProcesses()
@@ -40,24 +42,28 @@ public class GameHandler : MonoBehaviour
 
     private void GenerateComplexProcesses()
     {
-        processes.Add(new Process(processPrefab, "P1", 0.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P2", 0.4f, 0.3f));
-        processes.Add(new Process(processPrefab, "P3", 0.8f, 0.5f));
-        processes.Add(new Process(processPrefab, "P4", 1.2f, 1.0f));
-        processes.Add(new Process(processPrefab, "P5", 1.6f, 0.2f));
-        processes.Add(new Process(processPrefab, "P6", 2.0f, 0.4f));
-        processes.Add(new Process(processPrefab, "P7", 2.4f, 0.2f));
-        processes.Add(new Process(processPrefab, "P8", 2.8f, 0.2f));
-        processes.Add(new Process(processPrefab, "P9", 3.2f, 0.6f));
-        processes.Add(new Process(processPrefab, "P10", 3.6f, 0.7f));
-        processes.Add(new Process(processPrefab, "P11", 4.0f, 1.4f));
-        processes.Add(new Process(processPrefab, "P12", 4.4f, 0.3f));
+        processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
+        processes.Add(new Process(processPrefab, "P2", 2.0f, 4.0f));
+        processes.Add(new Process(processPrefab, "P3", 4.0f, 1.0f));
+        processes.Add(new Process(processPrefab, "P4", 5.0f, 4.0f));
+        processes.Add(new Process(processPrefab, "P5", 6.0f, 4.0f));
+        processes.Add(new Process(processPrefab, "P6", 8.0f, 8.0f));
+        processes.Add(new Process(processPrefab, "P7", 11.0f, 1.0f));
+        processes.Add(new Process(processPrefab, "P8", 12.0f, 2.0f));
+        processes.Add(new Process(processPrefab, "P9", 13.0f, 12.0f));
+        processes.Add(new Process(processPrefab, "P10", 13.0f, 4.0f));
+        processes.Add(new Process(processPrefab, "P11", 15.0f, 2.0f));
+        processes.Add(new Process(processPrefab, "P12", 18.0f, 6.0f));
+        processes.Add(new Process(processPrefab, "P13", 19.0f, 4.0f));
+        processes.Add(new Process(processPrefab, "P14", 20.0f, 5.0f));
+        processes.Add(new Process(processPrefab, "P15", 22.0f, 1.0f));
+        processes.Add(new Process(processPrefab, "P16", 25.0f, 2.0f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        float deltaTime = Time.deltaTime;
+        float deltaTime = speed * Time.deltaTime;
         if (firstTime)
         {
             firstTime = false;

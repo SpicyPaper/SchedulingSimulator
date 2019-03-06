@@ -13,7 +13,7 @@ public class Process
 
     private State state;
     private GameObject gameObject;
-    private GameObject prefab;
+    private readonly GameObject prefab;
     private const float SIZE_RATIO = 0.2f;
 
     public Process(GameObject prefab, string name, float arrival, float duration)
