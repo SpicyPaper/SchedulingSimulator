@@ -122,4 +122,9 @@ public class GameHandler : MonoBehaviour
             return -1;
         }
     }
+
+    //public void ChangeScheduler(Scheduler.Scheduling scheduling)
+    //{
+    //    scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
+    //}
 }
