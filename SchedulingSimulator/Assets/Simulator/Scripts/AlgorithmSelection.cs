@@ -33,9 +33,7 @@ public class AlgorithmSelection : MonoBehaviour
         if (id >= Lights.Count)
             return;
 
-        Renderer renderer = Lights[id].GetComponent<Renderer>();
-        Material mat = renderer.material;
-        mat.SetColor("_EmissionColor", color);
+        Lights[id].GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
     }
 
     public void SelectAlgo(int id)
