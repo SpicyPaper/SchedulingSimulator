@@ -45,43 +45,45 @@ public class Process
         gameObject.transform.localScale = new Vector3(0.4f, SIZE_RATIO * Duration, 0.4f);
         gameObject.transform.parent = GameObject.Find("Processes").transform;
         gameObject.name = Name;
+
+        state = State.New;
     }
 
-    public void Start()
+    public void WatchOut()
     {
-        state = State.Running;
-    }
-
-    public void Update()
-    {
-        if(state == State.New &&
-            gameObject != null &&
-            gameObject.transform.position.y - gameObject.transform.localScale.y / 2 < -2)
+        if (state == State.New &&
+                gameObject != null &&
+                gameObject.transform.position.y - gameObject.transform.localScale.y / 2 < -2)
         {
-            Debug.Log(gameObject.transform.position.y - gameObject.transform.localScale.y / 2);
             state = State.Ready;
         }
     }
 
-    public float Consume(float time)
+    public void Consume(float time)
     {
-        Progress -= time;
-        if (Progress <= 0)
+        if (state == State.Ready)
         {
-            Object.Destroy(gameObject);
-            state = State.Terminated;
-            return -Duration;
+            state = State.Running;
         }
-        else
+
+        if (state == State.Running)
         {
-            gameObject.transform.localScale = new Vector3(0.4f, SIZE_RATIO * Progress, 0.4f);
-            return 0f;
+            Progress -= time;
+            if (Progress <= 0)
+            {
+                Object.Destroy(gameObject);
+                state = State.Terminated;
+            }
+            else
+            {
+                gameObject.transform.localScale = new Vector3(0.4f, SIZE_RATIO * Progress, 0.4f);
+            }
         }
     }
 
-    public void Interrupt()
+    public void Reset()
     {
-        state = State.Waiting;
+        state = State.New;
     }
 
     

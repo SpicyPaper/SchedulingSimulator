@@ -31,7 +31,7 @@ public class GameHandler : MonoBehaviour
 
         firstTime = true;
 
-        GeneratorRandomProcesses();
+        GenerateComplexProcesses();
     }
 
     public void GeneratorRandomProcesses()
@@ -44,30 +44,30 @@ public class GameHandler : MonoBehaviour
 
     private void GenerateSimpleProcesses()
     {
-        /*processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
-        processes.Add(new Process(processPrefab, "P2", 2.0f, 4.0f));
-        processes.Add(new Process(processPrefab, "P3", 4.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P4", 5.0f, 4.0f));*/
+        processes.Add(new Process(processPrefab, Plateform, "P1", 0.0f, 7.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P2", 2.0f, 4.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P3", 4.0f, 1.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P4", 5.0f, 4.0f));
     }
 
     private void GenerateComplexProcesses()
     {
-        /*processes.Add(new Process(processPrefab, "P1", 0.0f, 7.0f));
-        processes.Add(new Process(processPrefab, "P2", 2.0f, 4.0f));
-        processes.Add(new Process(processPrefab, "P3", 4.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P4", 5.0f, 4.0f));
-        processes.Add(new Process(processPrefab, "P5", 6.0f, 4.0f));
-        processes.Add(new Process(processPrefab, "P6", 8.0f, 8.0f));
-        processes.Add(new Process(processPrefab, "P7", 11.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P8", 12.0f, 2.0f));
-        processes.Add(new Process(processPrefab, "P9", 13.0f, 10.0f));
-        processes.Add(new Process(processPrefab, "P10", 13.0f, 4.0f));
-        processes.Add(new Process(processPrefab, "P11", 15.0f, 2.0f));
-        processes.Add(new Process(processPrefab, "P12", 18.0f, 6.0f));
-        processes.Add(new Process(processPrefab, "P13", 19.0f, 4.0f));
-        processes.Add(new Process(processPrefab, "P14", 20.0f, 5.0f));
-        processes.Add(new Process(processPrefab, "P15", 22.0f, 1.0f));
-        processes.Add(new Process(processPrefab, "P16", 25.0f, 2.0f));*/
+        processes.Add(new Process(processPrefab, Plateform, "P1", 0.0f, 7.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P2", 2.0f, 4.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P3", 4.0f, 1.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P4", 5.0f, 4.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P5", 6.0f, 4.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P6", 8.0f, 8.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P7", 11.0f, 1.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P8", 12.0f, 2.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P9", 13.0f, 10.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P10", 13.0f, 4.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P11", 15.0f, 2.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P12", 18.0f, 6.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P13", 19.0f, 4.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P14", 20.0f, 5.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P15", 22.0f, 1.0f));
+        processes.Add(new Process(processPrefab, Plateform, "P16", 25.0f, 2.0f));
     }
 
     // Update is called once per frame
@@ -90,12 +90,12 @@ public class GameHandler : MonoBehaviour
 
                 if (nextIndex >= 0)
                 {
-                    scheduler.AddProcess(process, nextIndex);
-                    processes.Remove(process);
+                    if (scheduler.AddProcess(process, nextIndex))
+                    {
+                        processes.Remove(process);
+                    }
                 }
             }
-
-            process.Update();
         }
 
         scheduler.Run(deltaTime);
