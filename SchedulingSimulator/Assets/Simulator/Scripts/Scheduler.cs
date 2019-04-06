@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Scheduler
@@ -47,6 +46,18 @@ public class Scheduler
         }
 
         return available;
+    }
+
+    public bool IsDone()
+    {
+        for (int i = 0; i < processes.Length; i++)
+        {
+            if (processes[i] != null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void RemoveRunningProcess()

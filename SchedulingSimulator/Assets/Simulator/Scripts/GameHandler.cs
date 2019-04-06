@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameHandler : MonoBehaviour
@@ -17,12 +16,15 @@ public class GameHandler : MonoBehaviour
     private List<Process> processes;
     private bool firstTime;
     private GameObject processesObjects;
+    private Statistics stats;
+    private bool done;
 
     // Start is called before the first frame update
     void Start()
     {
         scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
+        done = false;
 
         processesObjects = new GameObject
         {
@@ -32,6 +34,7 @@ public class GameHandler : MonoBehaviour
         firstTime = true;
 
         GenerateComplexProcesses();
+        stats = new Statistics(processes.Count);
     }
 
     public void GeneratorRandomProcesses()
@@ -73,32 +76,45 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float deltaTime = speed * Time.deltaTime;
-        if (firstTime)
+        if (done)
         {
-            firstTime = false;
+
         }
-        else timePassed += deltaTime;
-
-        for (int i = processes.Count - 1; i >= 0; i--)
+        else if (processes.Count == 0 && scheduler.IsDone())
         {
-            Process process = processes[i];
-
-            if (timePassed >= process.Arrival)
+            float results = stats.Results();
+            Debug.Log(results + " seconds per process");
+            done = true;
+        }
+        else
+        {
+            float deltaTime = speed * Time.deltaTime;
+            if (firstTime)
             {
-                int nextIndex = GetNextIndex();
+                firstTime = false;
+            }
+            else timePassed += deltaTime;
 
-                if (nextIndex >= 0)
+            for (int i = processes.Count - 1; i >= 0; i--)
+            {
+                Process process = processes[i];
+
+                if (timePassed >= process.Arrival)
                 {
-                    if (scheduler.AddProcess(process, nextIndex))
+                    int nextIndex = GetNextIndex();
+
+                    if (nextIndex >= 0)
                     {
-                        processes.Remove(process);
+                        if (scheduler.AddProcess(process, nextIndex))
+                        {
+                            processes.Remove(process);
+                        }
                     }
                 }
             }
-        }
 
-        scheduler.Run(deltaTime);
+            scheduler.Run(deltaTime);
+        }
     }
 
     private int GetNextIndex()
@@ -122,9 +138,4 @@ public class GameHandler : MonoBehaviour
             return -1;
         }
     }
-
-    //public void ChangeScheduler(Scheduler.Scheduling scheduling)
-    //{
-    //    scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
-    //}
 }
