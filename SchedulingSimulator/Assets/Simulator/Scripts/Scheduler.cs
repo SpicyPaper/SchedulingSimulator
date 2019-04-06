@@ -26,7 +26,7 @@ public class Scheduler
         processes = new Process[slots];
         FIFO = new List<Process>();
         runningProcess = null;
-        indexRR = 0;
+        indexRR = -1;
         timeInRR = 0f;
         counter = 0;
     }
@@ -56,7 +56,6 @@ public class Scheduler
             if (processes[i] == runningProcess)
             {
                 processes[i] = null;
-                break;
             }
         }
         runningProcess = null;
@@ -101,6 +100,7 @@ public class Scheduler
             if (runningProcess.GetState() == Process.State.Terminated)
             {
                 RemoveRunningProcess();
+                timeInRR = (float) quantum;
             }
         }
     }
@@ -108,7 +108,7 @@ public class Scheduler
     private void AttributeProcess()
     {
         List<Process> readyProcesses = new List<Process>();
-        for(int i = 0; i < processes.Length; i++)
+        for (int i = 0; i < processes.Length; i++)
         {
             if (processes[i] != null && (processes[i].GetState() == Process.State.Ready || processes[i].GetState() == Process.State.Running))
             {
@@ -173,120 +173,41 @@ public class Scheduler
                 }
                 break;
             case Scheduling.ROUND_ROBIN:
+                if (indexRR == -1)
+                {
+                    runningProcess = FindNextProcessInRR();
+                }
+                else
+                {
+                    timeInRR += Time.deltaTime;
+                    if (timeInRR > quantum)
+                    {
+                        runningProcess = FindNextProcessInRR();
+                        timeInRR = 0;
+                    }
+                }
                 break;
         }
     }
 
-    /*private void x()
-    { 
-        switch (scheduling)
+    private Process FindNextProcessInRR()
+    {
+        int numberOfShifts = 0;
+        do
         {
-            case Scheduling.FIRST_COME_FIRST_SERVED:
-                Process firstProcess = null;
-                float firstArrival = float.MaxValue;
-                for (int i = 0; i < processes.Length; i++)
-                {
-                    if (processes[i] != null && processes[i].Arrival < firstArrival)
-                    {
-                        firstProcess = processes[i];
-                        firstArrival = firstProcess.Arrival;
-                    }
-                }
-                if (firstProcess != null)
-                {
-                    runningProcess = firstProcess;
-                    runningProcess.Start();
-                }
-                break;
-            case Scheduling.SHORTEST_JOB_FIRST_NON_PREEMTIVE:
-                Process smallerProcess = null;
-                float smallerDuration = float.MaxValue;
-                for (int i = 0; i < processes.Length; i++)
-                {
-                    if (processes[i] != null && processes[i].Duration < smallerDuration)
-                    {
-                        smallerProcess = processes[i];
-                        smallerDuration = smallerProcess.Duration;
-                    }
-                }
-                if (smallerProcess != null)
-                {
-                    runningProcess = smallerProcess;
-                    runningProcess.Start();
-                }
-                break;
-            case Scheduling.SHORTEST_JOB_FIRST_PREEMPTIVE:
-                Process progressProcess = null;
-                float smallerProgression = float.MaxValue;
-                for (int i = 0; i < processes.Length; i++)
-                {
-                    if (processes[i] != null && processes[i].Progress < smallerProgression)
-                    {
-                        progressProcess = processes[i];
-                        smallerProgression = progressProcess.Progress;
-                    }
-                }
-                if (progressProcess != null)
-                {
-                    if (runningProcess != null)
-                    {
-                        runningProcess.Interrupt();
-                    }
-                    runningProcess = progressProcess;
-                    runningProcess.Start();
-                }
-                break;
-            case Scheduling.ROUND_ROBIN:
-                if (FIFO.Count > 0 && indexRR >= 0 && indexRR < FIFO.Count)
-                {
-                    runningProcess = FIFO[indexRR];
-                }
-                break;
-        }
-    }*/
+            indexRR++;
+            numberOfShifts++;
+            if (indexRR >= processes.Length)
+            {
+                indexRR = 0;
+            }
 
+            if (processes[indexRR] != null && (processes[indexRR].GetState() == Process.State.Ready || processes[indexRR].GetState() == Process.State.Running))
+            {
+                return processes[indexRR];
+            }
+        } while (numberOfShifts < processes.Length);
+        
+        return null;
+    }
 }
-
-
-
-
-// RUN()
-/*if (runningProcess == null && processes.Length > 0)
-{
-    AttributeProcess();
-} 
-else
-{
-    //DrawFIFO();
-    runningProcess.Consume(timePassed);
-    bool attribute = false;
-
-    if (scheduling == Scheduling.ROUND_ROBIN)
-    {
-        timeInRR += timePassed;
-        if (timeInRR >= quantum)
-        {
-            timeInRR = 0f;
-            int swap = 0;
-            do {
-                indexRR++;
-                if (indexRR >= FIFO.Count)
-                {
-                    indexRR = 0;
-                }
-                swap++;
-            } while ((processes[indexRR] == null || processes[indexRR].GetState() == Process.State.New) && swap < processes.Length);
-            attribute = true;
-        }
-    }
-
-    if (runningProcess.GetState() == Process.State.Terminated)
-    {
-        RemoveRunningProcess();
-    }
-
-    if (attribute)
-    {
-        AttributeProcess();
-    }
-}*/
