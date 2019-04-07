@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -148,6 +149,7 @@ public class GameHandler : MonoBehaviour
     {
         Debug.Log(string.Format("Simulation {0} Started", algorithmSelection.CurrentAlgo));
         IsRunning = true;
+        ShowLeftScreen(false);
     }
 
     public void StopSimulation()
@@ -158,16 +160,32 @@ public class GameHandler : MonoBehaviour
             GetComponent<AddObjectToList>().AddItem(log);
             Debug.Log("Simulation stopped");
             IsRunning = false;
+            ShowLeftScreen(true);
         }
     }
 
     public void DisplayLog(Log log)
     {
-        MiddleScreenDisplay display = GetComponent<MiddleScreenDisplay>();
+        ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 1).ToArray().First();
         
         if (!display.IsDisplayed)
             display.Deploy();
 
         GetComponent<UpdateLogScreen>().SetLog(log);
+    }
+
+    public void HideLog()
+    {
+        ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 1).ToArray().First();
+        display.Undeploy();
+    }
+
+    public void ShowLeftScreen(bool show)
+    {
+        ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 0).ToArray().First();
+        if (show)
+            display.Undeploy();
+        else
+            display.Deploy();
     }
 }

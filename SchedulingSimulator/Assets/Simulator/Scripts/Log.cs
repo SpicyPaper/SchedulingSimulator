@@ -15,6 +15,6 @@ public class Log
 
     public string GetShortenedLogDisplay()
     {
-        return string.Format("{0} : {1}", SchedulingType, Name);
+        return string.Format("{0}", SchedulingType);
     }
 }

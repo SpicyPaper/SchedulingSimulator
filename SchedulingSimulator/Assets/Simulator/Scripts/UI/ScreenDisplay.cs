@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MiddleScreenDisplay : MonoBehaviour
+public class ScreenDisplay : MonoBehaviour
 {
-    public Transform MiddleScreenPosition;
+    public int Screen;
+    public Transform ScreenPosition;
     public Transform DeployedPosition;
     private Vector3 startPos;
     private Vector3 endPos;
@@ -14,7 +15,7 @@ public class MiddleScreenDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPos = MiddleScreenPosition.position;
+        startPos = ScreenPosition.position;
         endPos = DeployedPosition.position;
 
     }
@@ -36,7 +37,7 @@ public class MiddleScreenDisplay : MonoBehaviour
         float startTime = Time.time; // Time.time contains current frame time, so remember starting point
         while (Time.time - startTime <= 1)
         { // until one second passed
-            MiddleScreenPosition.position = Vector3.Lerp(startPos, endPos, Time.time - startTime); // lerp from A to B in one second
+            ScreenPosition.position = Vector3.Lerp(startPos, endPos, Time.time - startTime); // lerp from A to B in one second
             yield return 1; // wait for next frame
         }
     }
