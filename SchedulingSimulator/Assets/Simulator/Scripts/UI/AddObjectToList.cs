@@ -8,14 +8,15 @@ public class AddObjectToList : MonoBehaviour
     public GameObject Content;
     public GameObject ButtonPrefab;
 
-    public void AddItem()
+    public void AddItem(Log log)
     {
         GameObject button = Instantiate(ButtonPrefab);
         button.transform.SetParent(Content.transform);
         button.transform.localPosition = Vector3.zero;
         button.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        
 
-        button.GetComponentInChildren<Text>().text = "test";
+        button.GetComponent<ShowLog>().Log = log;
+
+        button.GetComponentInChildren<Text>().text = log.GetShortenedLogDisplay();
     }
 }

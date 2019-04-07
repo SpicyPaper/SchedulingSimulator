@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class ShowLog : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Log Log;
+
+    private GameHandler gameHandler;
+
+    private void Start()
     {
-        
+        gameHandler = GameObject.Find("GameHandler").GetComponent<GameHandler>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DisplayLog()
     {
-        
+        gameHandler.DisplayLog(Log);
     }
 }

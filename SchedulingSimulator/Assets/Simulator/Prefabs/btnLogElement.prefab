@@ -117,8 +117,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: AddItem
+      - m_Target: {fileID: 6876447049934208771}
+        m_MethodName: DisplayLog
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -152,7 +152,22 @@ public class GameHandler : MonoBehaviour
 
     public void StopSimulation()
     {
-        Debug.Log("Simulation stopped");
-        IsRunning = false;
+        if (IsRunning)
+        {
+            Log log = new Log(System.DateTime.Now.ToShortTimeString(), algorithmSelection.CurrentAlgo);
+            GetComponent<AddObjectToList>().AddItem(log);
+            Debug.Log("Simulation stopped");
+            IsRunning = false;
+        }
+    }
+
+    public void DisplayLog(Log log)
+    {
+        MiddleScreenDisplay display = GetComponent<MiddleScreenDisplay>();
+        
+        if (!display.IsDisplayed)
+            display.Deploy();
+
+        GetComponent<UpdateLogScreen>().SetLog(log);
     }
 }
