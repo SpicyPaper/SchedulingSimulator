@@ -403,7 +403,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: RUNNING
+  m_Text: STOPPED
 --- !u!222 &89806551
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1896,6 +1896,7 @@ MonoBehaviour:
   slots: 6
   quantum: 1
   speed: 1
+  SimulationState: {fileID: 89806550}
 --- !u!4 &565373427
 Transform:
   m_ObjectHideFlags: 0

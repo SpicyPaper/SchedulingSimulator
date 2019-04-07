@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameHandler : MonoBehaviour
     public int slots;
     public float quantum;
     public float speed;
+    public Text SimulationState;
 
     private float timePassed;
     private Scheduler scheduler;
@@ -19,9 +21,26 @@ public class GameHandler : MonoBehaviour
     private GameObject processesObjects;
     private AlgorithmSelection algorithmSelection;
 
+    private bool isRunning;
+
+    public bool IsRunning
+    {
+        get { return isRunning; }
+        set
+        {
+            isRunning = value;
+            if (SimulationState != null)
+            {
+                SimulationState.text = isRunning ? "RUNNING" : "STOPPED";
+            }
+        }
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
+        IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
         scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
@@ -128,10 +147,12 @@ public class GameHandler : MonoBehaviour
     public void StartSimulation()
     {
         Debug.Log(string.Format("Simulation {0} Started", algorithmSelection.CurrentAlgo));
+        IsRunning = true;
     }
 
     public void StopSimulation()
     {
         Debug.Log("Simulation stopped");
+        IsRunning = false;
     }
 }
