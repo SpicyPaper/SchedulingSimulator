@@ -8,12 +8,12 @@ public class AlgorithmSelection : MonoBehaviour
     public Color OffColor = Color.red;
 
     public List<GameObject> Lights;
+    public Scheduler.Scheduling CurrentAlgo { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        
-        
+        SelectAlgo(0);        
     }
 
     // Update is called once per frame
@@ -38,6 +38,7 @@ public class AlgorithmSelection : MonoBehaviour
 
     public void SelectAlgo(int id)
     {
+        CurrentAlgo = (Scheduler.Scheduling)id;
         DisableAllLights();
         ChangeLight(id, OnColor);
         // TODO change algo here

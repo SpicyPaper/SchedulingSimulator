@@ -17,10 +17,12 @@ public class GameHandler : MonoBehaviour
     private List<Process> processes;
     private bool firstTime;
     private GameObject processesObjects;
+    private AlgorithmSelection algorithmSelection;
 
     // Start is called before the first frame update
     void Start()
     {
+        algorithmSelection = GetComponent<AlgorithmSelection>();
         scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
 
@@ -123,8 +125,13 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    //public void ChangeScheduler(Scheduler.Scheduling scheduling)
-    //{
-    //    scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
-    //}
+    public void StartSimulation()
+    {
+        Debug.Log(string.Format("Simulation {0} Started", algorithmSelection.CurrentAlgo));
+    }
+
+    public void StopSimulation()
+    {
+        Debug.Log("Simulation stopped");
+    }
 }
