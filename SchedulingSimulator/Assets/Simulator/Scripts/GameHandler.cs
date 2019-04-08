@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
 {
@@ -10,6 +13,7 @@ public class GameHandler : MonoBehaviour
     public int slots;
     public float quantum;
     public float speed;
+    public Text SimulationState;
 
     private float timePassed;
     private Scheduler scheduler;
@@ -18,10 +22,29 @@ public class GameHandler : MonoBehaviour
     private GameObject processesObjects;
     private Statistics stats;
     private bool done;
+    private AlgorithmSelection algorithmSelection;
+
+    private bool isRunning;
+
+    public bool IsRunning
+    {
+        get { return isRunning; }
+        set
+        {
+            isRunning = value;
+            if (SimulationState != null)
+            {
+                SimulationState.text = isRunning ? "RUNNING" : "STOPPED";
+            }
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
+        IsRunning = false;
+        algorithmSelection = GetComponent<AlgorithmSelection>();
         scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
         done = false;
@@ -137,5 +160,49 @@ public class GameHandler : MonoBehaviour
         {
             return -1;
         }
+    }
+
+    public void StartSimulation()
+    {
+        Debug.Log(string.Format("Simulation {0} Started", algorithmSelection.CurrentAlgo));
+        IsRunning = true;
+        ShowLeftScreen(false);
+    }
+
+    public void StopSimulation()
+    {
+        if (IsRunning)
+        {
+            Log log = new Log(System.DateTime.Now.ToShortTimeString(), algorithmSelection.CurrentAlgo);
+            GetComponent<AddObjectToList>().AddItem(log);
+            Debug.Log("Simulation stopped");
+            IsRunning = false;
+            ShowLeftScreen(true);
+        }
+    }
+
+    public void DisplayLog(Log log)
+    {
+        ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 1).ToArray().First();
+        
+        if (!display.IsDisplayed)
+            display.Deploy();
+
+        GetComponent<UpdateLogScreen>().SetLog(log);
+    }
+
+    public void HideLog()
+    {
+        ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 1).ToArray().First();
+        display.Undeploy();
+    }
+
+    public void ShowLeftScreen(bool show)
+    {
+        ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 0).ToArray().First();
+        if (show)
+            display.Undeploy();
+        else
+            display.Deploy();
     }
 }
