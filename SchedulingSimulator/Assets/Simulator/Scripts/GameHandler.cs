@@ -21,7 +21,6 @@ public class GameHandler : MonoBehaviour
     private bool firstTime;
     private GameObject processesObjects;
     private Statistics stats;
-    private bool done;
     private AlgorithmSelection algorithmSelection;
 
     private bool isRunning;
@@ -47,7 +46,6 @@ public class GameHandler : MonoBehaviour
         algorithmSelection = GetComponent<AlgorithmSelection>();
         scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
-        done = false;
 
         processesObjects = new GameObject
         {
@@ -99,7 +97,7 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (done)
+        if (!isRunning)
         {
 
         }
@@ -107,7 +105,7 @@ public class GameHandler : MonoBehaviour
         {
             float results = stats.Results();
             Debug.Log(results + " seconds per process");
-            done = true;
+            isRunning = false;
         }
         else
         {
@@ -164,7 +162,6 @@ public class GameHandler : MonoBehaviour
 
     public void StartSimulation()
     {
-        Debug.Log(string.Format("Simulation {0} Started", algorithmSelection.CurrentAlgo));
         IsRunning = true;
         ShowLeftScreen(false);
     }
@@ -175,9 +172,20 @@ public class GameHandler : MonoBehaviour
         {
             Log log = new Log(System.DateTime.Now.ToShortTimeString(), algorithmSelection.CurrentAlgo);
             GetComponent<AddObjectToList>().AddItem(log);
-            Debug.Log("Simulation stopped");
             IsRunning = false;
             ShowLeftScreen(true);
+
+            scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
+            DestroyProcesses();
+        }
+    }
+
+    public void DestroyProcesses()
+    {
+        GameObject parent = GameObject.Find("Processes");
+        foreach (Transform child in parent.transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 
