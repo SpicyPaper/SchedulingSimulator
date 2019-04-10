@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,7 +43,6 @@ public class GameHandler : MonoBehaviour
     {
         IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
-        scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
 
         processesObjects = new GameObject
@@ -53,9 +51,6 @@ public class GameHandler : MonoBehaviour
         };
 
         firstTime = true;
-
-        GenerateComplexProcesses();
-        stats = new Statistics(processes.Count);
     }
 
     public void GeneratorRandomProcesses()
@@ -164,6 +159,10 @@ public class GameHandler : MonoBehaviour
     {
         IsRunning = true;
         ShowLeftScreen(false);
+        scheduler = new Scheduler(algorithmSelection.CurrentAlgo, slots, quantum, SpawnPoint);
+
+        GenerateComplexProcesses();
+        stats = new Statistics(processes.Count);
     }
 
     public void StopSimulation()
@@ -174,16 +173,15 @@ public class GameHandler : MonoBehaviour
             GetComponent<AddObjectToList>().AddItem(log);
             IsRunning = false;
             ShowLeftScreen(true);
-
-            scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
+            
             DestroyProcesses();
+            firstTime = true;
         }
     }
 
     public void DestroyProcesses()
     {
-        GameObject parent = GameObject.Find("Processes");
-        foreach (Transform child in parent.transform)
+        foreach (Transform child in processesObjects.transform)
         {
             Destroy(child.gameObject);
         }
