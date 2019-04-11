@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +33,6 @@ public class GameHandler : MonoBehaviour
     private bool firstTime;
     private GameObject processesObjects;
     private Statistics stats;
-    private bool done;
     private AlgorithmSelection algorithmSelection;
 
     private bool isRunning;
@@ -59,9 +57,7 @@ public class GameHandler : MonoBehaviour
         initialGravity = Physics.gravity;
         IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
-        scheduler = new Scheduler(scheduling, slots, quantum, SpawnPoint);
         processes = new List<Process>();
-        done = false;
 
         processesObjects = new GameObject
         {
@@ -69,9 +65,6 @@ public class GameHandler : MonoBehaviour
         };
 
         firstTime = true;
-
-        GenerateComplexProcesses();
-        stats = new Statistics(processes.Count);
     }
 
     public void GeneratorRandomProcesses()
@@ -113,7 +106,7 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (done)
+        if (!isRunning)
         {
 
         }
@@ -121,7 +114,7 @@ public class GameHandler : MonoBehaviour
         {
             float results = stats.Results();
             Debug.Log(results + " seconds per process");
-            done = true;
+            isRunning = false;
         }
         else
         {
@@ -178,9 +171,12 @@ public class GameHandler : MonoBehaviour
 
     public void StartSimulation()
     {
-        Debug.Log(string.Format("Simulation {0} Started", algorithmSelection.CurrentAlgo));
         IsRunning = true;
         ShowLeftScreen(false);
+        scheduler = new Scheduler(algorithmSelection.CurrentAlgo, slots, quantum, SpawnPoint);
+
+        GenerateComplexProcesses();
+        stats = new Statistics(processes.Count);
     }
 
     public void StopSimulation()
@@ -189,9 +185,19 @@ public class GameHandler : MonoBehaviour
         {
             Log log = new Log(System.DateTime.Now.ToShortTimeString(), algorithmSelection.CurrentAlgo);
             GetComponent<AddObjectToList>().AddItem(log);
-            Debug.Log("Simulation stopped");
             IsRunning = false;
             ShowLeftScreen(true);
+            
+            DestroyProcesses();
+            firstTime = true;
+        }
+    }
+
+    public void DestroyProcesses()
+    {
+        foreach (Transform child in processesObjects.transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 

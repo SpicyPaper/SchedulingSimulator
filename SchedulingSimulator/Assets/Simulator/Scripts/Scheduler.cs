@@ -5,6 +5,8 @@ public class Scheduler
 {
     public enum Scheduling { FIRST_COME_FIRST_SERVED, SHORTEST_JOB_FIRST_PREEMPTIVE, SHORTEST_JOB_FIRST_NON_PREEMTIVE, ROUND_ROBIN };
 
+    public static int SlotID;
+
     private Transform spawnPoint;
     private Process[] processes;
     private List<Process> FIFO;
@@ -28,6 +30,7 @@ public class Scheduler
         indexRR = -1;
         timeInRR = 0f;
         counter = 0;
+        SlotID = 0;
     }
 
     public Process[] GetProcesses()
@@ -138,6 +141,7 @@ public class Scheduler
                     {
                         if (readyProcesses[i] != null && readyProcesses[i].Arrival < best)
                         {
+                            SlotID = i;
                             process = readyProcesses[i];
                             best = process.Arrival;
                         }
@@ -155,6 +159,7 @@ public class Scheduler
                     {
                         if (readyProcesses[i] != null && readyProcesses[i].Progress < best)
                         {
+                            SlotID = i;
                             process = readyProcesses[i];
                             best = process.Progress;
                         }
@@ -170,6 +175,7 @@ public class Scheduler
                 {
                     if (readyProcesses[i] != null && readyProcesses[i].Progress < best)
                     {
+                        SlotID = i;
                         process = readyProcesses[i];
                         best = process.Progress;
                     }
@@ -215,6 +221,7 @@ public class Scheduler
 
             if (processes[indexRR] != null && (processes[indexRR].GetState() == Process.State.Ready || processes[indexRR].GetState() == Process.State.Running))
             {
+                SlotID = indexRR;
                 return processes[indexRR];
             }
         } while (numberOfShifts < processes.Length);
