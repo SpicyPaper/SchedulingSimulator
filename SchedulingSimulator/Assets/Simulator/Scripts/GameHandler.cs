@@ -14,6 +14,19 @@ public class GameHandler : MonoBehaviour
     public float speed;
     public Text SimulationState;
 
+    private static float simulationSpeed = 1;
+
+    public static float SimulationSpeed
+    {
+        get { return simulationSpeed; }
+        set
+        {
+            simulationSpeed = value;
+            Physics.gravity = initialGravity * simulationSpeed;
+        }
+    }
+
+    private static Vector3 initialGravity;
     private float timePassed;
     private Scheduler scheduler;
     private List<Process> processes;
@@ -41,6 +54,7 @@ public class GameHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialGravity = Physics.gravity;
         IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
         processes = new List<Process>();
@@ -211,4 +225,10 @@ public class GameHandler : MonoBehaviour
         else
             display.Deploy();
     }
+
+    public void SetSimulationSpeed(Slider slider)
+    {
+        SimulationSpeed = slider.value;
+    }
+    
 }

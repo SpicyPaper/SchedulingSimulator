@@ -11,13 +11,13 @@ public class PusherLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentPos = transform.position;
+        currentPos = transform.position + Vector3.forward * transform.localScale.z / 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentPos += transform.forward * (Speed * Time.deltaTime);
+        currentPos += transform.forward * (Speed * GameHandler.SimulationSpeed * Time.deltaTime);
 
         transform.position = currentPos;
     }
