@@ -16,7 +16,7 @@ public class ConveyorBeltLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float offset = Time.time * scrollSpeed;
+        float offset = Time.time * scrollSpeed * GameHandler.SimulationSpeed;
         rend.material.SetTextureOffset("_MainTex", new Vector2(0, -offset));
     }
 }
