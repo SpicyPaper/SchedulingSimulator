@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CircularSawHandler : MonoBehaviour
 {
-    public List<GameObject> CircularSaws;
+    public List<GameObject> CircularSaws { get; set; }
 
     private const float ROTATION_SPEED = 5;
 
