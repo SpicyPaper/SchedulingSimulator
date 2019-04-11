@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CircularSawHandler : MonoBehaviour
 {
+    public int SlotID;
+
     public List<GameObject> CircularSaws { get; set; }
 
     private const float ROTATION_SPEED = 5;
@@ -29,7 +31,7 @@ public class CircularSawHandler : MonoBehaviour
         }
     }
 
-    private bool CheckIfBlocIsOn()
+    private bool CheckIfCorrectBlocIsOn()
     {
         RaycastHit rayHit;
         Collider collider = GetComponent<Collider>();
@@ -43,17 +45,22 @@ public class CircularSawHandler : MonoBehaviour
 
         // The characters can pass through some items, they are listed here.
         if (res && rayHit.transform.tag == "FactoryCube")
+        {
             return true;
-
-        return !res;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        isSawRotationEnable = CheckIfBlocIsOn();
+        isSawRotationEnable = CheckIfCorrectBlocIsOn();
 
-        if(isSawRotationEnable)
+        if(isSawRotationEnable &&
+            Scheduler.SlotID == SlotID)
         {
             for (int i = 0; i < CircularSaws.Count; i++)
             {
