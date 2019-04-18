@@ -8,6 +8,10 @@ public class AddObjectToList : MonoBehaviour
     public GameObject Content;
     public GameObject ButtonPrefab;
 
+    /// <summary>
+    /// Add a button on the left screen holding the log information
+    /// </summary>
+    /// <param name="log">Log of the last run</param>
     public void AddItem(Log log)
     {
         GameObject button = Instantiate(ButtonPrefab);

@@ -9,12 +9,11 @@ public class UpdateLogScreen : MonoBehaviour
     public Text SchedulingAlgorithm;
 
     private Log log;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
+    /// <summary>
+    /// Set the log
+    /// </summary>
+    /// <param name="log">The log to be set</param>
     public void SetLog(Log log)
     {
         this.log = log;

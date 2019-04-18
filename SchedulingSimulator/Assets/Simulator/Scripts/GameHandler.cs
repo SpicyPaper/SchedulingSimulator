@@ -169,6 +169,9 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when starting the animation with the start button
+    /// </summary>
     public void StartSimulation()
     {
         IsRunning = true;
@@ -179,6 +182,9 @@ public class GameHandler : MonoBehaviour
         stats = new Statistics(processes.Count);
     }
 
+    /// <summary>
+    /// Called when stopping the simulation with the stop button
+    /// </summary>
     public void StopSimulation()
     {
         if (IsRunning)
@@ -201,6 +207,10 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Display the log on the middle screen
+    /// </summary>
+    /// <param name="log">The log to display</param>
     public void DisplayLog(Log log)
     {
         ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 1).ToArray().First();
@@ -211,12 +221,19 @@ public class GameHandler : MonoBehaviour
         GetComponent<UpdateLogScreen>().SetLog(log);
     }
 
+    /// <summary>
+    /// Hide the middle screen that show the log detail
+    /// </summary>
     public void HideLog()
     {
         ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 1).ToArray().First();
         display.Undeploy();
     }
 
+    /// <summary>
+    /// Deploy or undeploy the left screen
+    /// </summary>
+    /// <param name="show">Whether or not the screen must be showed</param>
     public void ShowLeftScreen(bool show)
     {
         ScreenDisplay display = GetComponents<ScreenDisplay>().Where(s => s.Screen == 0).ToArray().First();
@@ -226,6 +243,10 @@ public class GameHandler : MonoBehaviour
             display.Deploy();
     }
 
+    /// <summary>
+    /// Change the simulation speed
+    /// </summary>
+    /// <param name="slider">Slider holding the simulation speed</param>
     public void SetSimulationSpeed(Slider slider)
     {
         SimulationSpeed = slider.value;

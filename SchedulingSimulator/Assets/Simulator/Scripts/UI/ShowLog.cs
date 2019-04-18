@@ -13,6 +13,9 @@ public class ShowLog : MonoBehaviour
         gameHandler = GameObject.Find("GameHandler").GetComponent<GameHandler>();
     }
 
+    /// <summary>
+    /// Display the log
+    /// </summary>
     public void DisplayLog()
     {
         gameHandler.DisplayLog(Log);

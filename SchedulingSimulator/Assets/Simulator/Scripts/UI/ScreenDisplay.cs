@@ -20,18 +20,30 @@ public class ScreenDisplay : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Deploy the screen (make it visible)
+    /// </summary>
     public void Deploy()
     {
         StartCoroutine(MoveTo(startPos, endPos));
         IsDisplayed = true;
     }
 
+    /// <summary>
+    /// Undeploy the screen (make it invisible)
+    /// </summary>
     public void Undeploy()
     {
         StartCoroutine(MoveTo(endPos, startPos));
         IsDisplayed = false;
     }
-
+    
+    /// <summary>
+    /// Move the screen from one place to another
+    /// </summary>
+    /// <param name="startPos">Start position of the screen</param>
+    /// <param name="endPos">End position of the screen</param>
+    /// <returns></returns>
     IEnumerator MoveTo(Vector3 startPos, Vector3 endPos)
     {
         float startTime = Time.time; // Time.time contains current frame time, so remember starting point
