@@ -75,25 +75,6 @@ public class Scheduler
         runningProcess = null;
     }
 
-    private void DrawFIFO()
-    {
-        counter++;
-        string fifo = "|";
-        for (int i = 0; i < FIFO.Count; i++)
-        {
-            fifo += FIFO[i].Name + "|";
-        }
-        Debug.Log(counter + ": " + fifo);
-        string pointer = "";
-        for (int i = 0; i < indexRR; i++)
-        {
-            pointer += "     ";
-        }
-        pointer += " ^";
-        Debug.Log(counter + ": " + pointer);
-        Debug.Log(counter + ": " + indexRR);
-    }
-
     public void Run(float timePassed)
     {
         AttributeProcess();
@@ -119,6 +100,18 @@ public class Scheduler
         }
     }
 
+    public int SlotOfProcess(Process process)
+    {
+        for (int i = 0; i < processes.Length; i++)
+        {
+            if (processes[i] == process)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void AttributeProcess()
     {
         List<Process> readyProcesses = new List<Process>();
@@ -132,6 +125,7 @@ public class Scheduler
 
         Process process = null;
         float best = float.MaxValue;
+        int selectedProcessSlot = -1;
         switch (scheduling)
         {
             case Scheduling.FIRST_COME_FIRST_SERVED:
@@ -141,11 +135,14 @@ public class Scheduler
                     {
                         if (readyProcesses[i] != null && readyProcesses[i].Arrival < best)
                         {
-                            SlotID = i;
                             process = readyProcesses[i];
                             best = process.Arrival;
                         }
                     }
+
+                    selectedProcessSlot = SlotOfProcess(process);
+                    if (selectedProcessSlot >= 0) SlotID = selectedProcessSlot;
+
                     if (process != null && process != runningProcess)
                     {
                         runningProcess = process;
@@ -159,11 +156,14 @@ public class Scheduler
                     {
                         if (readyProcesses[i] != null && readyProcesses[i].Progress < best)
                         {
-                            SlotID = i;
                             process = readyProcesses[i];
                             best = process.Progress;
                         }
                     }
+
+                    selectedProcessSlot = SlotOfProcess(process);
+                    if (selectedProcessSlot >= 0) SlotID = selectedProcessSlot;
+
                     if (process != null)
                     {
                         runningProcess = process;
@@ -175,11 +175,14 @@ public class Scheduler
                 {
                     if (readyProcesses[i] != null && readyProcesses[i].Progress < best)
                     {
-                        SlotID = i;
                         process = readyProcesses[i];
                         best = process.Progress;
                     }
                 }
+
+                selectedProcessSlot = SlotOfProcess(process);
+                if (selectedProcessSlot >= 0) SlotID = selectedProcessSlot;
+
                 if (process != null)
                 {
                     if (runningProcess != null)
