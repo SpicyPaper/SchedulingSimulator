@@ -15,7 +15,6 @@ public class Scheduler
     private readonly double quantum;
     private int indexRR;
     private float timeInRR;
-    private int counter;
     private const float SPACING = 1.24f;
 
     public Scheduler(Scheduling scheduling, int slots, double quantum, Transform spawnPoint)
@@ -29,7 +28,6 @@ public class Scheduler
         runningProcess = null;
         indexRR = -1;
         timeInRR = 0f;
-        counter = 0;
         SlotID = 0;
     }
 
@@ -78,7 +76,7 @@ public class Scheduler
     public void Run(float timePassed)
     {
         AttributeProcess();
-
+        
         // Check when a process falls on the consumer and set it to ready if it's the case
         for (int i = 0; i < processes.Length; i++)
         {
@@ -87,7 +85,7 @@ public class Scheduler
                 processes[i].WatchOut();
             }
         }
-
+        
         if (runningProcess != null)
         {
             runningProcess.Consume(timePassed);
@@ -210,11 +208,12 @@ public class Scheduler
                     timeInRR += Time.deltaTime;
                     if (timeInRR > quantum)
                     {
-                        if (runningProcess != null)
-                        {
-                            runningProcess.Reset();
-                        }
+                        Process processToReset = runningProcess;
                         runningProcess = FindNextProcessInRR();
+                        if (processToReset != null)
+                        {
+                            processToReset.Reset();
+                        }
                         timeInRR = 0;
                     }
                 }

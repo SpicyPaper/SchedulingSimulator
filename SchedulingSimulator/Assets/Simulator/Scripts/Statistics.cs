@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class Statistics
 {
-    private readonly int nbProcesses;
-    private float startTime;
+    private readonly List<Process> processes;
+    private readonly float startTime;
+    private readonly float simulationSpeed;
 
-    public Statistics(int nbProcesses)
+    public Statistics(List<Process> processes, float simulationSpeed)
     {
-        this.nbProcesses = nbProcesses;
+        this.processes = processes;
+        this.simulationSpeed = simulationSpeed;
         startTime = Time.time;
     }
 
-    public float Results()
+    public string AverageWaitingTime()
     {
-        float duration = Time.time - startTime;
-        return duration / nbProcesses;
+        float result = 0f;
+        foreach (Process process in processes)
+        {
+            result += process.TimeWaited;
+        }
+        result /= processes.Count;
+        result *= simulationSpeed;
+        return result.ToString("F2");
     }
 }

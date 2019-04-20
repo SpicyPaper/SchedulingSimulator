@@ -11,7 +11,6 @@ public class GameHandler : MonoBehaviour
     public Scheduler.Scheduling scheduling;
     public int slots;
     public float quantum;
-    public float speed;
     public Text SimulationState;
 
     private static float simulationSpeed = 1;
@@ -30,6 +29,7 @@ public class GameHandler : MonoBehaviour
     private float timePassed;
     private Scheduler scheduler;
     private List<Process> processes;
+    private List<Process> finishedProcesses;
     private bool firstTime;
     private GameObject processesObjects;
     private Statistics stats;
@@ -58,6 +58,7 @@ public class GameHandler : MonoBehaviour
         IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
         processes = new List<Process>();
+        finishedProcesses = new List<Process>();
 
         processesObjects = new GameObject
         {
@@ -73,6 +74,11 @@ public class GameHandler : MonoBehaviour
         {
             processes.Add(new Process(processPrefab, Plateform, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
         }
+    }
+
+    private void GenerateSingleProcesses()
+    {
+        processes.Add(new Process(processPrefab, Plateform, "P1", 0.0f, 10.0f));
     }
 
     private void GenerateSimpleProcesses()
@@ -112,13 +118,12 @@ public class GameHandler : MonoBehaviour
         }
         else if (processes.Count == 0 && scheduler.IsDone())
         {
-            float results = stats.Results();
-            Debug.Log(results + " seconds per process");
+            Debug.Log("Average waiting time: " + stats.AverageWaitingTime());
             isRunning = false;
         }
         else
         {
-            float deltaTime = speed * Time.deltaTime;
+            float deltaTime = SimulationSpeed * Time.deltaTime;
             if (firstTime)
             {
                 firstTime = false;
@@ -139,6 +144,7 @@ public class GameHandler : MonoBehaviour
                     {
                         if (scheduler.AddProcess(process, nextIndex))
                         {
+                            finishedProcesses.Add(process);
                             processes.Remove(process);
                         }
                     }
@@ -178,10 +184,13 @@ public class GameHandler : MonoBehaviour
     {
         IsRunning = true;
         ShowLeftScreen(false);
-        scheduler = new Scheduler(algorithmSelection.CurrentAlgo, slots, quantum, SpawnPoint);
+        scheduler = new Scheduler(algorithmSelection.CurrentAlgo, slots, quantum / SimulationSpeed, SpawnPoint);
 
+        processes = new List<Process>();
+        finishedProcesses = new List<Process>();
         GenerateComplexProcesses();
-        stats = new Statistics(processes.Count);
+        stats = new Statistics(finishedProcesses, SimulationSpeed);
+        timePassed = 0;
     }
 
     /// <summary>
@@ -198,7 +207,6 @@ public class GameHandler : MonoBehaviour
             
             DestroyProcesses();
             firstTime = true;
-            timePassed = 0;
         }
     }
 
