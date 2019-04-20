@@ -18,11 +18,12 @@ public class AddObjectToList : MonoBehaviour
         button.transform.SetParent(Content.transform);
         button.transform.localPosition = Vector3.zero;
         button.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-        button.GetComponent<ShowLog>().Log = log;
-
+        
         Text buttonText = button.GetComponentInChildren<Text>();
         buttonText.text = log.GetSchedulingName();
+        buttonText.color = Color.black;
         buttonText.fontSize = 1;
+
+        button.GetComponent<ShowLog>().Log = log;
     }
 }
