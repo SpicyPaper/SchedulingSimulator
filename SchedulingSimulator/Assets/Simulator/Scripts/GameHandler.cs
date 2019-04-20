@@ -191,6 +191,11 @@ public class GameHandler : MonoBehaviour
         GenerateComplexProcesses();
         stats = new Statistics(finishedProcesses, SimulationSpeed);
         timePassed = 0;
+
+        GameObject.Find("btnImport").GetComponent<Button>().interactable = false;
+        GameObject.Find("btnStart").GetComponent<Button>().interactable = false;
+        GameObject.Find("SliderSpeed").GetComponent<Slider>().interactable = false;
+        GameObject.Find("inputSeed").GetComponent<InputField>().interactable = false;
     }
 
     /// <summary>
@@ -207,6 +212,11 @@ public class GameHandler : MonoBehaviour
             
             DestroyProcesses();
             firstTime = true;
+
+            GameObject.Find("btnImport").GetComponent<Button>().interactable = true;
+            GameObject.Find("btnStart").GetComponent<Button>().interactable = true;
+            GameObject.Find("SliderSpeed").GetComponent<Slider>().interactable = true;
+            GameObject.Find("inputSeed").GetComponent<InputField>().interactable = true;
         }
     }
 
