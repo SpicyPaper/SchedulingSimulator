@@ -21,6 +21,8 @@ public class AddObjectToList : MonoBehaviour
 
         button.GetComponent<ShowLog>().Log = log;
 
-        button.GetComponentInChildren<Text>().text = log.GetShortenedLogDisplay();
+        Text buttonText = button.GetComponentInChildren<Text>();
+        buttonText.text = log.GetSchedulingName();
+        buttonText.fontSize = 1;
     }
 }

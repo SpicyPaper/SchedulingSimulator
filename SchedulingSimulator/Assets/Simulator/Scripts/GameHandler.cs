@@ -114,11 +114,11 @@ public class GameHandler : MonoBehaviour
     {
         if (!isRunning)
         {
-
+            // Action available
         }
         else if (processes.Count == 0 && scheduler.IsDone())
         {
-            Debug.Log("Average waiting time: " + stats.AverageWaitingTime());
+            StopSimulation(false);
             isRunning = false;
         }
         else
@@ -196,11 +196,11 @@ public class GameHandler : MonoBehaviour
     /// <summary>
     /// Called when stopping the simulation with the stop button
     /// </summary>
-    public void StopSimulation()
+    public void StopSimulation(bool forced)
     {
         if (IsRunning)
         {
-            Log log = new Log(System.DateTime.Now.ToShortTimeString(), algorithmSelection.CurrentAlgo);
+            Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced);
             GetComponent<AddObjectToList>().AddItem(log);
             IsRunning = false;
             ShowLeftScreen(true);

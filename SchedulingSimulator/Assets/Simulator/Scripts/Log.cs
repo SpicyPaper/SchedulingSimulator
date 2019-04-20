@@ -2,19 +2,102 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Log 
+public class Log
 {
-    public string Name;
-    public Scheduler.Scheduling SchedulingType;
+    private readonly Statistics stats;
+    private readonly Scheduler.Scheduling schedulingType;
+    private readonly float duration;
+    private readonly bool interrupted;
+    private System.DateTime dateTime;
 
-    public Log(string name, Scheduler.Scheduling schedulingType)
+    public Log(Statistics stats, Scheduler.Scheduling schedulingType, float duration, bool interrupted)
     {
-        Name = name;
-        SchedulingType = schedulingType;
+        this.stats = stats;
+        this.schedulingType = schedulingType;
+        this.duration = duration;
+        this.interrupted = interrupted;
+        dateTime = System.DateTime.Now;
     }
 
-    public string GetShortenedLogDisplay()
+    public string GetSchedulingName()
     {
-        return string.Format("{0}", SchedulingType);
+        switch (schedulingType)
+        {
+            case Scheduler.Scheduling.FIRST_COME_FIRST_SERVED:
+                return "First come, first served";
+            case Scheduler.Scheduling.ROUND_ROBIN:
+                return "Round Robin";
+            case Scheduler.Scheduling.SHORTEST_JOB_FIRST_NON_PREEMTIVE:
+                return "Shortest job first (non preemptive)";
+            case Scheduler.Scheduling.SHORTEST_JOB_FIRST_PREEMPTIVE:
+                return "Shortest job first (preemptive)";
+        }
+        return "?";
     }
+
+    public string GetDateAndTime()
+    {
+        string date = dateTime.Day + "." + dateTime.Month + "." + dateTime.Year;
+        string time = dateTime.Hour + ":" + dateTime.Minute;
+        return date + " (" + time + ")";
+    }
+
+    public string GetDuration()
+    {
+        return duration.ToString("F2") + " seconds";
+    }
+
+    public string GetEndState()
+    {
+        if (interrupted)
+        {
+            return "Simulation got interrupted";
+        }
+        else
+        {
+            return "Simulation finished correctly";
+        }
+    }
+
+    public string GetAverage()
+    {
+        return stats.AverageWaitingTime() + " seconds";
+    }
+
+    public string GetAverageScore()
+    {
+        return stats.AverageWaitingTimeScore(duration);
+    }
+
+    public string GetMax()
+    {
+        return stats.MaxWaitingTime() + " seconds";
+    }
+
+    public string GetMaxScore()
+    {
+        return stats.MaxWaitingTimeScore(duration);
+    }
+
+    public string GetFinalScore()
+    {
+        return stats.FinalScore();
+    }
+
+    public Color GetAverageScoreColor()
+    {
+        return stats.AverageScoreColor();
+    }
+
+    public Color GetMaxScoreColor()
+    {
+        return stats.MaxScoreColor();
+    }
+
+    public Color GetFinalScoreColor()
+    {
+        return stats.FinalScoreColor();
+    }
+
 }
+
