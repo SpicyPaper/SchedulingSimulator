@@ -198,6 +198,7 @@ public class GameHandler : MonoBehaviour
             
             DestroyProcesses();
             firstTime = true;
+            timePassed = 0;
         }
     }
 
