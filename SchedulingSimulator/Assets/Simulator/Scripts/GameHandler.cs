@@ -131,6 +131,8 @@ public class GameHandler : MonoBehaviour
 
                 if (timePassed >= process.Arrival)
                 {
+                    process.Arrived();
+
                     int nextIndex = GetNextIndex();
 
                     if (nextIndex >= 0)

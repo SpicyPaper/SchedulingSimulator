@@ -145,6 +145,10 @@ public class Scheduler
 
                     if (process != null && process != runningProcess)
                     {
+                        if (runningProcess != null)
+                        {
+                            runningProcess.Reset();
+                        }
                         runningProcess = process;
                     }
                 }
@@ -166,6 +170,10 @@ public class Scheduler
 
                     if (process != null)
                     {
+                        if (runningProcess != null)
+                        {
+                            runningProcess.Reset();
+                        }
                         runningProcess = process;
                     }
                 }
@@ -202,6 +210,10 @@ public class Scheduler
                     timeInRR += Time.deltaTime;
                     if (timeInRR > quantum)
                     {
+                        if (runningProcess != null)
+                        {
+                            runningProcess.Reset();
+                        }
                         runningProcess = FindNextProcessInRR();
                         timeInRR = 0;
                     }

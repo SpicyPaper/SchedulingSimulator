@@ -8,11 +8,14 @@ public class Process
     public float Arrival { get; set; }
     public float Duration { get; set; }
     public float Progress { get; set; }
+    public float TimeWaited { get; set; }
 
     private State state;
     private GameObject gameObject;
-    private GameObject plateform;
+    private readonly GameObject plateform;
     private readonly GameObject prefab;
+    private float timeArrived;
+
     private const float SIZE_RATIO = 0.2f;
 
     public Process(GameObject prefab, GameObject plateform, string name, float arrival, float duration)
@@ -25,6 +28,7 @@ public class Process
         Duration = duration;
         Progress = duration;
         state = State.New;
+        timeArrived = 0;
     }
 
     public State GetState()
@@ -47,6 +51,11 @@ public class Process
         state = State.New;
     }
 
+    public void Arrived()
+    {
+        timeArrived = Time.time;
+    }
+
     public void WatchOut()
     {
         if (state == State.New &&
@@ -62,6 +71,7 @@ public class Process
         if (state == State.Ready)
         {
             state = State.Running;
+            TimeWaited += Time.time - timeArrived;
         }
 
         if (state == State.Running)
@@ -82,6 +92,7 @@ public class Process
     public void Reset()
     {
         state = State.New;
+        timeArrived = Time.time;
     }
 
     
