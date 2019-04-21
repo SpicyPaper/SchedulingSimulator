@@ -42,6 +42,11 @@ public class Log
         return date + " (" + time + ")";
     }
 
+    public string GetTime()
+    {
+        return dateTime.ToLongTimeString();
+    }
+
     public string GetDuration()
     {
         return duration.ToString("F2") + " seconds";

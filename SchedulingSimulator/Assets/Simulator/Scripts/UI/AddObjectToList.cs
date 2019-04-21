@@ -20,7 +20,7 @@ public class AddObjectToList : MonoBehaviour
         button.transform.localRotation = Quaternion.Euler(Vector3.zero);
         
         Text buttonText = button.GetComponentInChildren<Text>();
-        buttonText.text = log.GetSchedulingName();
+        buttonText.text = log.GetSchedulingName() + "\n" + log.GetTime();
         buttonText.color = Color.black;
         buttonText.fontSize = 1;
 
