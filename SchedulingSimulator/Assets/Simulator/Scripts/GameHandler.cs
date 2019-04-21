@@ -182,6 +182,7 @@ public class GameHandler : MonoBehaviour
     /// </summary>
     public void StartSimulation()
     {
+        HideLog();
         IsRunning = true;
         ShowLeftScreen(false);
         scheduler = new Scheduler(algorithmSelection.CurrentAlgo, slots, quantum / SimulationSpeed, SpawnPoint);

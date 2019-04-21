@@ -25,8 +25,11 @@ public class ScreenDisplay : MonoBehaviour
     /// </summary>
     public void Deploy()
     {
-        StartCoroutine(MoveTo(startPos, endPos));
-        IsDisplayed = true;
+        if (!IsDisplayed)
+        {
+            StartCoroutine(MoveTo(startPos, endPos));
+            IsDisplayed = true;
+        }
     }
 
     /// <summary>
@@ -34,8 +37,11 @@ public class ScreenDisplay : MonoBehaviour
     /// </summary>
     public void Undeploy()
     {
-        StartCoroutine(MoveTo(endPos, startPos));
-        IsDisplayed = false;
+        if (IsDisplayed)
+        {
+            StartCoroutine(MoveTo(endPos, startPos));
+            IsDisplayed = false;
+        }
     }
     
     /// <summary>
