@@ -54,8 +54,4 @@ public class AlgorithmSelection : MonoBehaviour
         DisableAllLights();
         ChangeLight(id, OnColor);
     }
-
-
-
-    
 }

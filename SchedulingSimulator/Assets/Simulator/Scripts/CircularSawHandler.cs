@@ -12,6 +12,8 @@ public class CircularSawHandler : MonoBehaviour
 
     private bool isSawRotationEnable;
 
+    public bool IsSawTurning { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +64,7 @@ public class CircularSawHandler : MonoBehaviour
         if(isSawRotationEnable &&
             Scheduler.SlotID == SlotID)
         {
+            IsSawTurning = true;
             for (int i = 0; i < CircularSaws.Count; i++)
             {
                 if(i > CircularSaws.Count / 2 - 1)
@@ -73,6 +76,10 @@ public class CircularSawHandler : MonoBehaviour
                     CircularSaws[i].transform.Rotate(Vector3.right * -ROTATION_SPEED);
                 }
             }
+        }
+        else
+        {
+            IsSawTurning = false;
         }
     }
 }
