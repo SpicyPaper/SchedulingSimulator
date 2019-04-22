@@ -54,6 +54,10 @@ public class GameHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // TODO : Temp create a json file with process
+        CreateTempProcessJsonFile();
+        // END TODO
+
         initialGravity = Physics.gravity;
         IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
@@ -177,6 +181,56 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    private void CreateTempProcessJsonFile()
+    {
+        ListProcessesModel listProcessModel = new ListProcessesModel();
+        listProcessModel.processes = new List<ProcessModel>();
+
+        ProcessModel processModel = new ProcessModel
+        {
+            arrival = 0,
+            duration = 2
+        };
+        listProcessModel.processes.Add(processModel);
+
+        ProcessModel processModel2 = new ProcessModel
+        {
+            arrival = 1,
+            duration = 2
+        };
+        listProcessModel.processes.Add(processModel2);
+
+        ProcessModel processModel3 = new ProcessModel
+        {
+            arrival = 0,
+            duration = 5
+        };
+        listProcessModel.processes.Add(processModel3);
+
+        Debug.Log(JsonUtility.ToJson(listProcessModel));
+    }
+
+    private void OpenTempFile()
+    {
+        CreateProcessesBasedOnJsonFile(Resources.Load<TextAsset>(@"process").text);
+    }
+
+    /// <summary>
+    /// Create the processes based on the json file content
+    /// </summary>
+    /// <param name="jsonFileContent">The content of a json file containing process</param>
+    private void CreateProcessesBasedOnJsonFile(string jsonFileContent)
+    {
+        ListProcessesModel listProcessesModel = JsonUtility.FromJson<ListProcessesModel>(jsonFileContent);
+
+        int counter = 0;
+        foreach (ProcessModel processModel in listProcessesModel.processes)
+        {
+            counter++;
+            processes.Add(new Process(processPrefab, Plateform, "P" + counter, processModel.arrival, processModel.duration));
+        }
+    }
+
     /// <summary>
     /// Called when starting the animation with the start button
     /// </summary>
@@ -189,7 +243,9 @@ public class GameHandler : MonoBehaviour
 
         processes = new List<Process>();
         finishedProcesses = new List<Process>();
-        GenerateComplexProcesses();
+        // TODO : temp call
+        OpenTempFile();
+        //GenerateComplexProcesses();
         stats = new Statistics(finishedProcesses, SimulationSpeed);
         timePassed = 0;
 
