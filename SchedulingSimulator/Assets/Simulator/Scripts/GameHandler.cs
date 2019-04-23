@@ -89,6 +89,8 @@ public class GameHandler : MonoBehaviour
         // CreateTempProcessJsonFile();
 
         jsonPath = "";
+        JsonPathFile.color = Color.blue;
+        JsonPathFile.text = "No file imported";
         initialGravity = Physics.gravity;
         IsRunning = false;
         createLog = true;
@@ -284,6 +286,16 @@ public class GameHandler : MonoBehaviour
             GameObject.Find("SliderSpeed").GetComponent<Slider>().interactable = false;
             GameObject.Find("inputSeed").GetComponent<InputField>().interactable = false;
         }
+    }
+
+    /// <summary>
+    /// Remove the json path import
+    /// </summary>
+    public void RemoveJsonPath()
+    {
+        jsonPath = "";
+        JsonPathFile.color = Color.blue;
+        JsonPathFile.text = "No file imported";
     }
 
     /// <summary>
