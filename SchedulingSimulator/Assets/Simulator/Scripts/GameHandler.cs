@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +15,8 @@ public class GameHandler : MonoBehaviour
     public int slots;
     public float quantum;
     public Text SimulationState;
+    public Text Seed;
+    public Text Path;
 
     private static float simulationSpeed = 1;
 
@@ -34,6 +39,7 @@ public class GameHandler : MonoBehaviour
     private GameObject processesObjects;
     private Statistics stats;
     private AlgorithmSelection algorithmSelection;
+    private string JSONPath;
 
     private bool isRunning;
 
@@ -50,14 +56,37 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    public void OpenExplorer()
+    {
+        JSONPath = EditorUtility.OpenFilePanel("Overwrite with json", "", "json");
+        if(JSONPath != "")
+        {
+            Path.text = JSONPath;
+        }
+    }
+
+    /// <summary>
+    /// Read the content of a given file
+    /// </summary>
+    /// <param name="path">the path where the file is located</param>
+    /// <returns>the content of the file</returns>
+    public string ReadString(string path)
+    {
+        //Read the text from directly from the test.txt file
+        StreamReader reader = new StreamReader(path);
+        string content = reader.ReadToEnd();
+        reader.Close();
+
+        return content;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        // TODO : Temp create a json file with process
-        CreateTempProcessJsonFile();
-        // END TODO
+        // Create a json file with process models
+        // CreateTempProcessJsonFile();
 
+        JSONPath = "";
         initialGravity = Physics.gravity;
         IsRunning = false;
         algorithmSelection = GetComponent<AlgorithmSelection>();
@@ -74,43 +103,22 @@ public class GameHandler : MonoBehaviour
 
     public void GeneratorRandomProcesses()
     {
-        for (int i = 0; i < 16; i++)
+        string seedText = Seed.text;
+        if(seedText != "")
+        {
+            Random.InitState(int.Parse(seedText));
+        }
+        else
+        {
+            Random.InitState(0);
+        }
+
+        int nbProcess = Random.Range(0, 30);
+
+        for (int i = 0; i < nbProcess; i++)
         {
             processes.Add(new Process(processPrefab, Plateform, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
         }
-    }
-
-    private void GenerateSingleProcesses()
-    {
-        processes.Add(new Process(processPrefab, Plateform, "P1", 0.0f, 10.0f));
-    }
-
-    private void GenerateSimpleProcesses()
-    {
-        processes.Add(new Process(processPrefab, Plateform, "P1", 0.0f, 7.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P2", 2.0f, 4.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P3", 4.0f, 1.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P4", 5.0f, 4.0f));
-    }
-
-    private void GenerateComplexProcesses()
-    {
-        processes.Add(new Process(processPrefab, Plateform, "P1", 0.0f, 7.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P2", 2.0f, 4.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P3", 4.0f, 1.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P4", 5.0f, 4.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P5", 6.0f, 4.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P6", 8.0f, 8.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P7", 11.0f, 1.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P8", 12.0f, 2.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P9", 13.0f, 10.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P10", 13.0f, 4.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P11", 15.0f, 2.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P12", 18.0f, 6.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P13", 19.0f, 4.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P14", 20.0f, 5.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P15", 22.0f, 1.0f));
-        processes.Add(new Process(processPrefab, Plateform, "P16", 25.0f, 2.0f));
     }
 
     // Update is called once per frame
@@ -210,11 +218,6 @@ public class GameHandler : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(listProcessModel));
     }
 
-    private void OpenTempFile()
-    {
-        CreateProcessesBasedOnJsonFile(Resources.Load<TextAsset>(@"process").text);
-    }
-
     /// <summary>
     /// Create the processes based on the json file content
     /// </summary>
@@ -243,9 +246,14 @@ public class GameHandler : MonoBehaviour
 
         processes = new List<Process>();
         finishedProcesses = new List<Process>();
-        // TODO : temp call
-        OpenTempFile();
-        //GenerateComplexProcesses();
+        if(JSONPath == "")
+        {
+            GeneratorRandomProcesses();
+        }
+        else
+        {
+            CreateProcessesBasedOnJsonFile(ReadString(JSONPath));
+        }
         stats = new Statistics(finishedProcesses, SimulationSpeed);
         timePassed = 0;
 
