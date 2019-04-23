@@ -12,16 +12,14 @@ public class Process
 
     private State state;
     private GameObject gameObject;
-    private readonly GameObject plateform;
     private readonly GameObject prefab;
     private float timeArrived;
 
     private const float SIZE_RATIO = 0.2f;
 
-    public Process(GameObject prefab, GameObject plateform, string name, float arrival, float duration)
+    public Process(GameObject prefab, string name, float arrival, float duration)
     {
         this.prefab = prefab;
-        this.plateform = plateform;
 
         Name = name;
         Arrival = arrival;

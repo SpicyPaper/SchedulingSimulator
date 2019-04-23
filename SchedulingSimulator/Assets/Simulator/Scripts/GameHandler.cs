@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class GameHandler : MonoBehaviour
 {
     public Transform SpawnPoint;
-    public GameObject Plateform;
     public GameObject processPrefab;
     public Scheduler.Scheduling scheduling;
     public int slots;
@@ -41,6 +40,7 @@ public class GameHandler : MonoBehaviour
     private AlgorithmSelection algorithmSelection;
     private string jsonPath;
     private bool createLog;
+    private int seed;
 
     private bool isRunning;
 
@@ -95,6 +95,7 @@ public class GameHandler : MonoBehaviour
         algorithmSelection = GetComponent<AlgorithmSelection>();
         processes = new List<Process>();
         finishedProcesses = new List<Process>();
+        seed = 0;
 
         processesObjects = new GameObject
         {
@@ -109,18 +110,19 @@ public class GameHandler : MonoBehaviour
         string seedText = Seed.text;
         if(seedText != "")
         {
-            Random.InitState(int.Parse(seedText));
+            try
+            {
+                seed = int.Parse(seedText);
+            }
+            catch (System.FormatException) {}
         }
-        else
-        {
-            Random.InitState(0);
-        }
+        Random.InitState(seed);
 
         int nbProcess = Random.Range(0, 30);
 
         for (int i = 0; i < nbProcess; i++)
         {
-            processes.Add(new Process(processPrefab, Plateform, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
+            processes.Add(new Process(processPrefab, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
         }
     }
 
@@ -234,7 +236,7 @@ public class GameHandler : MonoBehaviour
             foreach (ProcessModel processModel in listProcessesModel.processes)
             {
                 counter++;
-                processes.Add(new Process(processPrefab, Plateform, "P" + counter, processModel.arrival, processModel.duration));
+                processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processModel.duration));
             }
 
             return true;
@@ -293,7 +295,7 @@ public class GameHandler : MonoBehaviour
         {
             if(createLog)
             {
-                Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced);
+                Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced, simulationSpeed, seed, Path.GetFileName(jsonPath));
                 GetComponent<AddObjectToList>().AddItem(log);
             }
 

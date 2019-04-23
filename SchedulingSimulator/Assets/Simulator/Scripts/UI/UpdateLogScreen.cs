@@ -14,6 +14,8 @@ public class UpdateLogScreen : MonoBehaviour
     private Text maxText;
     private Text maxScoreText;
     private Text finalScoreText;
+    private Text speedText;
+    private Text datasourceText;
 
     public void Start()
     {
@@ -26,6 +28,8 @@ public class UpdateLogScreen : MonoBehaviour
         maxText = GameObject.Find("MaxText").GetComponent<Text>();
         maxScoreText = GameObject.Find("MaxScoreText").GetComponent<Text>();
         finalScoreText = GameObject.Find("FinalScoreText").GetComponent<Text>();
+        speedText = GameObject.Find("SpeedText").GetComponent<Text>();
+        datasourceText = GameObject.Find("DatasourceText").GetComponent<Text>();
     }
 
     /// <summary>
@@ -40,9 +44,10 @@ public class UpdateLogScreen : MonoBehaviour
         stateText.text = log.GetEndState();
         averageText.text = log.GetAverage();
         maxText.text = log.GetMax();
-
         averageScoreText.text = log.GetAverageScore();
         maxScoreText.text = log.GetMaxScore();
         finalScoreText.text = log.GetFinalScore();
+        speedText.text = log.GetSpeed();
+        datasourceText.text = log.GetDatasource();
     }
 }
