@@ -109,7 +109,11 @@ public class GameHandler : MonoBehaviour
         string seedText = Seed.text;
         if(seedText != "")
         {
-            seed = int.Parse(seedText);
+            try
+            {
+                seed = int.Parse(seedText);
+            }
+            catch (System.FormatException) {}
         }
         Random.InitState(seed);
 
