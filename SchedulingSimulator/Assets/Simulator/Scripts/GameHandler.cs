@@ -16,7 +16,7 @@ public class GameHandler : MonoBehaviour
     public float quantum;
     public Text SimulationState;
     public Text Seed;
-    public Text Path;
+    public Text JsonPathFile;
 
     private static float simulationSpeed = 1;
 
@@ -39,7 +39,8 @@ public class GameHandler : MonoBehaviour
     private GameObject processesObjects;
     private Statistics stats;
     private AlgorithmSelection algorithmSelection;
-    private string JSONPath;
+    private string jsonPath;
+    private bool createLog;
 
     private bool isRunning;
 
@@ -58,10 +59,11 @@ public class GameHandler : MonoBehaviour
 
     public void OpenExplorer()
     {
-        JSONPath = EditorUtility.OpenFilePanel("Overwrite with json", "", "json");
-        if(JSONPath != "")
+        jsonPath = EditorUtility.OpenFilePanel("Overwrite with json", "", "json");
+        if(jsonPath != "")
         {
-            Path.text = JSONPath;
+            JsonPathFile.color = Color.black;
+            JsonPathFile.text = Path.GetFileName(jsonPath);
         }
     }
 
@@ -86,9 +88,10 @@ public class GameHandler : MonoBehaviour
         // Create a json file with process models
         // CreateTempProcessJsonFile();
 
-        JSONPath = "";
+        jsonPath = "";
         initialGravity = Physics.gravity;
         IsRunning = false;
+        createLog = true;
         algorithmSelection = GetComponent<AlgorithmSelection>();
         processes = new List<Process>();
         finishedProcesses = new List<Process>();
@@ -131,7 +134,6 @@ public class GameHandler : MonoBehaviour
         else if (processes.Count == 0 && scheduler.IsDone())
         {
             StopSimulation(false);
-            isRunning = false;
         }
         else
         {
@@ -189,7 +191,7 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    private void CreateTempProcessJsonFile()
+    private void CreateProcessJsonFile()
     {
         ListProcessesModel listProcessModel = new ListProcessesModel();
         listProcessModel.processes = new List<ProcessModel>();
@@ -222,15 +224,29 @@ public class GameHandler : MonoBehaviour
     /// Create the processes based on the json file content
     /// </summary>
     /// <param name="jsonFileContent">The content of a json file containing process</param>
-    private void CreateProcessesBasedOnJsonFile(string jsonFileContent)
+    private bool CreateProcessesBasedOnJsonFile(string jsonFileContent)
     {
-        ListProcessesModel listProcessesModel = JsonUtility.FromJson<ListProcessesModel>(jsonFileContent);
-
-        int counter = 0;
-        foreach (ProcessModel processModel in listProcessesModel.processes)
+        try
         {
-            counter++;
-            processes.Add(new Process(processPrefab, Plateform, "P" + counter, processModel.arrival, processModel.duration));
+            ListProcessesModel listProcessesModel = JsonUtility.FromJson<ListProcessesModel>(jsonFileContent);
+
+            int counter = 0;
+            foreach (ProcessModel processModel in listProcessesModel.processes)
+            {
+                counter++;
+                processes.Add(new Process(processPrefab, Plateform, "P" + counter, processModel.arrival, processModel.duration));
+            }
+
+            return true;
+        }
+        catch (System.Exception)
+        {
+            JsonPathFile.color = Color.red;
+            JsonPathFile.text = "An error occured while reading the file content!";
+            createLog = false;
+            StopSimulation(false);
+
+            return false;
         }
     }
 
@@ -239,6 +255,7 @@ public class GameHandler : MonoBehaviour
     /// </summary>
     public void StartSimulation()
     {
+        bool isValid = true;
         HideLog();
         IsRunning = true;
         ShowLeftScreen(false);
@@ -246,21 +263,25 @@ public class GameHandler : MonoBehaviour
 
         processes = new List<Process>();
         finishedProcesses = new List<Process>();
-        if(JSONPath == "")
+        if(jsonPath == "")
         {
             GeneratorRandomProcesses();
         }
         else
         {
-            CreateProcessesBasedOnJsonFile(ReadString(JSONPath));
+            isValid = CreateProcessesBasedOnJsonFile(ReadString(jsonPath));
         }
-        stats = new Statistics(finishedProcesses, SimulationSpeed);
-        timePassed = 0;
 
-        GameObject.Find("btnImport").GetComponent<Button>().interactable = false;
-        GameObject.Find("btnStart").GetComponent<Button>().interactable = false;
-        GameObject.Find("SliderSpeed").GetComponent<Slider>().interactable = false;
-        GameObject.Find("inputSeed").GetComponent<InputField>().interactable = false;
+        if(isValid)
+        {
+            stats = new Statistics(finishedProcesses, SimulationSpeed);
+            timePassed = 0;
+
+            GameObject.Find("btnImport").GetComponent<Button>().interactable = false;
+            GameObject.Find("btnStart").GetComponent<Button>().interactable = false;
+            GameObject.Find("SliderSpeed").GetComponent<Slider>().interactable = false;
+            GameObject.Find("inputSeed").GetComponent<InputField>().interactable = false;
+        }
     }
 
     /// <summary>
@@ -270,8 +291,12 @@ public class GameHandler : MonoBehaviour
     {
         if (IsRunning)
         {
-            Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced);
-            GetComponent<AddObjectToList>().AddItem(log);
+            if(createLog)
+            {
+                Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced);
+                GetComponent<AddObjectToList>().AddItem(log);
+            }
+
             IsRunning = false;
             ShowLeftScreen(true);
             
@@ -288,6 +313,7 @@ public class GameHandler : MonoBehaviour
             {
                 pipe.ResetColor();
             }
+            createLog = true;
         }
     }
 
