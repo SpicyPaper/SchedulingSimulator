@@ -102,7 +102,7 @@ public class Log
 
     public string GetDatasource()
     {
-        if (path != null)
+        if (path != "")
         {
             return "JSON file (" + path + ")";
         }
