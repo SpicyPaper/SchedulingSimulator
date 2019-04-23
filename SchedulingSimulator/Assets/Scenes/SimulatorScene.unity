@@ -9108,7 +9108,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 565373426}
-        m_MethodName: OpenExplorer
+        m_MethodName: RemoveJsonPath
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
