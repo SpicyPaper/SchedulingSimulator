@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using SFB;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,8 +59,9 @@ public class GameHandler : MonoBehaviour
 
     public void OpenExplorer()
     {
-        jsonPath = EditorUtility.OpenFilePanel("Overwrite with json", "", "json");
-        if(jsonPath != "")
+        jsonPath = StandaloneFileBrowser.OpenFilePanel("Open File", "", "json", false)[0];
+
+        if (jsonPath != "")
         {
             JsonPathFile.color = Color.black;
             JsonPathFile.text = Path.GetFileName(jsonPath);
@@ -235,10 +236,19 @@ public class GameHandler : MonoBehaviour
             ListProcessesModel listProcessesModel = JsonUtility.FromJson<ListProcessesModel>(jsonFileContent);
 
             int counter = 0;
+            float processDuration = 0;
             foreach (ProcessModel processModel in listProcessesModel.processes)
             {
                 counter++;
-                processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processModel.duration));
+                if(processModel.duration > 10)
+                {
+                    processDuration = 10;
+                }
+                else
+                {
+                    processDuration = processModel.duration;
+                }
+                processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processDuration));
             }
 
             return true;
