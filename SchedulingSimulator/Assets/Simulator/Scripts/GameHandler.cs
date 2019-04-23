@@ -235,10 +235,19 @@ public class GameHandler : MonoBehaviour
             ListProcessesModel listProcessesModel = JsonUtility.FromJson<ListProcessesModel>(jsonFileContent);
 
             int counter = 0;
+            float processDuration = 0;
             foreach (ProcessModel processModel in listProcessesModel.processes)
             {
                 counter++;
-                processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processModel.duration));
+                if(processModel.duration > 10)
+                {
+                    processDuration = 10;
+                }
+                else
+                {
+                    processDuration = processModel.duration;
+                }
+                processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processDuration));
             }
 
             return true;
