@@ -120,11 +120,11 @@ public class GameHandler : MonoBehaviour
         }
         Random.InitState(seed);
 
-        int nbProcess = Random.Range(0, 30);
+        int nbProcess = Random.Range(0, 50);
 
         for (int i = 0; i < nbProcess; i++)
         {
-            processes.Add(new Process(processPrefab, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
+            processes.Add(new Process(processPrefab, "P" + i.ToString(), Random.Range(0, 60), Random.Range(1, 10)));
         }
     }
 
