@@ -14,6 +14,11 @@ public class PipeColor : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        ResetColor();
+    }
+
+    public void ResetColor()
+    {
         GetComponent<Renderer>().material.SetColor("_Color", OffColor);
     }
 }
