@@ -274,6 +274,12 @@ public class GameHandler : MonoBehaviour
             GameObject.Find("btnStart").GetComponent<Button>().interactable = true;
             GameObject.Find("SliderSpeed").GetComponent<Slider>().interactable = true;
             GameObject.Find("inputSeed").GetComponent<InputField>().interactable = true;
+
+            PipeColor[] pipes = GameObject.FindObjectsOfType<PipeColor>();
+            foreach (PipeColor pipe in pipes)
+            {
+                pipe.ResetColor();
+            }
         }
     }
 
