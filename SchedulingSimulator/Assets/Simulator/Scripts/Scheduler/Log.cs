@@ -8,14 +8,20 @@ public class Log
     private readonly Scheduler.Scheduling schedulingType;
     private readonly float duration;
     private readonly bool interrupted;
+    private readonly float speed;
+    private readonly int seed;
+    private readonly string path;
     private System.DateTime dateTime;
 
-    public Log(Statistics stats, Scheduler.Scheduling schedulingType, float duration, bool interrupted)
+    public Log(Statistics stats, Scheduler.Scheduling schedulingType, float duration, bool interrupted, float speed, int seed, string path)
     {
         this.stats = stats;
         this.schedulingType = schedulingType;
         this.duration = duration;
         this.interrupted = interrupted;
+        this.speed = speed;
+        this.seed = seed;
+        this.path = path;
         dateTime = System.DateTime.Now;
     }
 
@@ -87,6 +93,30 @@ public class Log
     public string GetFinalScore()
     {
         return stats.FinalScore();
+    }
+
+    public string GetSpeed()
+    {
+        return "x" + speed;
+    }
+
+    public string GetDatasource()
+    {
+        if (path != null)
+        {
+            return "JSON file (" + path + ")";
+        }
+        else
+        {
+            if (seed == 0)
+            {
+                return "Default seed (0)";
+            }
+            else
+            {
+                return "Seed (" + seed + ")";
+            }
+        }
     }
 
     public Color GetAverageScoreColor()

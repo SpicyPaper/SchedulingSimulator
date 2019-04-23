@@ -9,14 +9,13 @@ using UnityEngine.UI;
 public class GameHandler : MonoBehaviour
 {
     public Transform SpawnPoint;
-    public GameObject Plateform;
     public GameObject processPrefab;
     public Scheduler.Scheduling scheduling;
     public int slots;
     public float quantum;
     public Text SimulationState;
     public Text Seed;
-    public Text Path;
+    public Text PathText;
 
     private static float simulationSpeed = 1;
 
@@ -40,6 +39,8 @@ public class GameHandler : MonoBehaviour
     private Statistics stats;
     private AlgorithmSelection algorithmSelection;
     private string JSONPath;
+    private string JSONName;
+    private int seed;
 
     private bool isRunning;
 
@@ -59,9 +60,10 @@ public class GameHandler : MonoBehaviour
     public void OpenExplorer()
     {
         JSONPath = EditorUtility.OpenFilePanel("Overwrite with json", "", "json");
-        if(JSONPath != "")
+        if(JSONPath != null)
         {
-            Path.text = JSONPath;
+            PathText.text = Path.GetFileName(JSONPath);
+            JSONName = Path.GetFileName(JSONPath);
         }
     }
 
@@ -92,6 +94,7 @@ public class GameHandler : MonoBehaviour
         algorithmSelection = GetComponent<AlgorithmSelection>();
         processes = new List<Process>();
         finishedProcesses = new List<Process>();
+        seed = 0;
 
         processesObjects = new GameObject
         {
@@ -106,18 +109,15 @@ public class GameHandler : MonoBehaviour
         string seedText = Seed.text;
         if(seedText != "")
         {
-            Random.InitState(int.Parse(seedText));
+            seed = int.Parse(seedText);
         }
-        else
-        {
-            Random.InitState(0);
-        }
+        Random.InitState(seed);
 
         int nbProcess = Random.Range(0, 30);
 
         for (int i = 0; i < nbProcess; i++)
         {
-            processes.Add(new Process(processPrefab, Plateform, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
+            processes.Add(new Process(processPrefab, "P" + i.ToString(), Random.Range(0, 20), Random.Range(1, 10)));
         }
     }
 
@@ -230,7 +230,7 @@ public class GameHandler : MonoBehaviour
         foreach (ProcessModel processModel in listProcessesModel.processes)
         {
             counter++;
-            processes.Add(new Process(processPrefab, Plateform, "P" + counter, processModel.arrival, processModel.duration));
+            processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processModel.duration));
         }
     }
 
@@ -270,7 +270,7 @@ public class GameHandler : MonoBehaviour
     {
         if (IsRunning)
         {
-            Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced);
+            Log log = new Log(stats, algorithmSelection.CurrentAlgo, timePassed, forced, simulationSpeed, seed, JSONName);
             GetComponent<AddObjectToList>().AddItem(log);
             IsRunning = false;
             ShowLeftScreen(true);
