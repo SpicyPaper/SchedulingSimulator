@@ -93,7 +93,6 @@ public class Process
                 Object.Destroy(gameObject);
                 state = State.Terminated;
                 TimeWaited -= timeTravel;
-                Debug.Log(timeTravel);
             }
             else
             {

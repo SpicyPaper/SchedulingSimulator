@@ -256,7 +256,7 @@ public class GameHandler : MonoBehaviour
         catch (System.Exception)
         {
             JsonPathFile.color = Color.red;
-            JsonPathFile.text = "An error occured while reading the file content!";
+            JsonPathFile.text = "An error occured!";
             createLog = false;
             StopSimulation(false);
 
