@@ -14,6 +14,9 @@ public class Process
     private GameObject gameObject;
     private readonly GameObject prefab;
     private float timeArrived;
+    private float timeTravel;
+    private float timeStartTravel;
+    private bool arrived;
 
     private const float SIZE_RATIO = 0.2f;
 
@@ -27,6 +30,9 @@ public class Process
         Progress = duration;
         state = State.New;
         timeArrived = 0;
+        timeTravel = 0;
+        timeStartTravel = 0;
+        arrived = false;
     }
 
     public State GetState()
@@ -37,6 +43,7 @@ public class Process
     public void Place(Vector3 pos)
     {
         gameObject.transform.position = pos;
+        timeStartTravel = Time.time;
     }
 
     public void Admit()
@@ -61,6 +68,12 @@ public class Process
                 gameObject.transform.position.y - gameObject.transform.localScale.y / 2 < -2)
         {
             state = State.Ready;
+
+            if (!arrived)
+            {
+                arrived = true;
+                timeTravel = Time.time - timeStartTravel;
+            }
         }
     }
 
@@ -79,6 +92,8 @@ public class Process
             {
                 Object.Destroy(gameObject);
                 state = State.Terminated;
+                TimeWaited -= timeTravel;
+                Debug.Log(timeTravel);
             }
             else
             {
