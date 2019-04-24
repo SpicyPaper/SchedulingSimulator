@@ -251,6 +251,8 @@ public class GameHandler : MonoBehaviour
                 processes.Add(new Process(processPrefab, "P" + counter, processModel.arrival, processDuration));
             }
 
+            Random.InitState(0);
+
             return true;
         }
         catch (System.Exception)
