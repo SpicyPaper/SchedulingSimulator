@@ -343,6 +343,14 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Quit and close the application
+    /// </summary>
+    public void QuitApplication()
+    {
+        Application.Quit();
+    }
+
     public void DestroyProcesses()
     {
         foreach (Transform child in processesObjects.transform)
