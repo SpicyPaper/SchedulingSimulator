@@ -59,13 +59,18 @@ public class GameHandler : MonoBehaviour
 
     public void OpenExplorer()
     {
-        jsonPath = StandaloneFileBrowser.OpenFilePanel("Open File", "", "json", false)[0];
-
-        if (jsonPath != "")
+        string[] selectedFiles = StandaloneFileBrowser.OpenFilePanel("Open File", "", "json", false);
+        if (selectedFiles.Length > 0)
         {
-            JsonPathFile.color = Color.black;
-            JsonPathFile.text = Path.GetFileName(jsonPath);
+            jsonPath = selectedFiles[0];
+
+            if (jsonPath != "")
+            {
+                JsonPathFile.color = Color.black;
+                JsonPathFile.text = Path.GetFileName(jsonPath);
+            }
         }
+        
     }
 
     /// <summary>
