@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Statistics based on the waiting times of processes
+/// </summary>
 public class Statistics
 {
     private readonly List<Process> processes;
@@ -23,6 +25,10 @@ public class Statistics
         finalScore = 0;
     }
 
+    /// <summary>
+    /// Compute average waiting time
+    /// </summary>
+    /// <returns>Average waiting time</returns>
     public string AverageWaitingTime()
     {
         float result = 0f;
@@ -36,6 +42,11 @@ public class Statistics
         return result.ToString("F2");
     }
 
+    /// <summary>
+    /// Compute the score based on the average waiting time
+    /// </summary>
+    /// <param name="duration">Duration of the simulation</param>
+    /// <returns>The score based on the average waiting time</returns>
     public string AverageWaitingTimeScore(float duration)
     {
         averageTimeScore = 0f;
@@ -51,6 +62,10 @@ public class Statistics
         return averageTimeScore.ToString("F2") + " / 10";
     }
 
+    /// <summary>
+    /// Compute the maximum waiting time
+    /// </summary>
+    /// <returns>The maximum waiting time</returns>
     public string MaxWaitingTime()
     {
         float maxWaitingTime = float.MinValue;
@@ -66,6 +81,11 @@ public class Statistics
         return maxWaitingTime.ToString("F2");
     }
 
+    /// <summary>
+    /// Compute the score based on the maximum waiting time
+    /// </summary>
+    /// <param name="duration">Duration of the simulation</param>
+    /// <returns>The score based on the maximum waiting time</returns>
     public string MaxWaitingTimeScore(float duration)
     {
         maxTimeScore = float.MinValue;
@@ -83,32 +103,13 @@ public class Statistics
         return maxTimeScore.ToString("F2") + " / 10";
     }
 
+    /// <summary>
+    /// Final score based on average waiting time and maximum waiting time
+    /// </summary>
+    /// <returns>The final score</returns>
     public string FinalScore()
     {
         finalScore = (averageTimeScore + maxTimeScore) / 2;
         return finalScore.ToString("F2") + " / 10";
-    }
-
-    public Color AverageScoreColor()
-    {
-        return ColorScore(averageTimeScore);
-    }
-
-    public Color MaxScoreColor()
-    {
-        return ColorScore(maxTimeScore);
-    }
-
-    public Color FinalScoreColor()
-    {
-        return ColorScore(finalScore);
-    }
-
-    private Color ColorScore(float score)
-    {
-        if (score <= 3) return Color.red;
-        if (score <= 5) return new Color(244, 152, 66);
-        if (score <= 8) return Color.yellow;
-        else return Color.green;
     }
 }
