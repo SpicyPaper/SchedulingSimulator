@@ -174,6 +174,10 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get next free index in the list of conveyor belts
+    /// </summary>
+    /// <returns></returns>
     private int GetNextIndex()
     {
         List<int> possibilities = new List<int>();

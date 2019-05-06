@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Process of the scheduling simulator
+/// </summary>
 public class Process
 {
     public enum State { New, Ready, Running, Waiting, Terminated };
@@ -40,12 +43,19 @@ public class Process
         return state;
     }
 
+    /// <summary>
+    /// Place the gameobject of the process in his position 
+    /// </summary>
+    /// <param name="pos">Vector corresponding to the new process position</param>
     public void Place(Vector3 pos)
     {
         gameObject.transform.position = pos;
         timeStartTravel = Time.time;
     }
 
+    /// <summary>
+    /// Create a new process and his gameobject, setting his state to new
+    /// </summary>
     public void Admit()
     {
         gameObject = Object.Instantiate(prefab) as GameObject;
@@ -56,11 +66,17 @@ public class Process
         state = State.New;
     }
 
+    /// <summary>
+    /// Register the time where the process is ready to be treated
+    /// </summary>
     public void Arrived()
     {
         timeArrived = Time.time;
     }
 
+    /// <summary>
+    /// Check if a new process is ready to be treated
+    /// </summary>
     public void WatchOut()
     {
         if (state == State.New &&
@@ -77,14 +93,20 @@ public class Process
         }
     }
 
+    /// <summary>
+    /// Update the progress of the process
+    /// </summary>
+    /// <param name="time">Time to increment</param>
     public void Consume(float time)
     {
+        // Update the state of the process to Running if it's not already the case
         if (state == State.Ready)
         {
             state = State.Running;
             TimeWaited += Time.time - timeArrived;
         }
 
+        // Increase progress
         if (state == State.Running)
         {
             Progress -= time;
@@ -101,6 +123,9 @@ public class Process
         }
     }
 
+    /// <summary>
+    /// Reset a process
+    /// </summary>
     public void Reset()
     {
         state = State.New;

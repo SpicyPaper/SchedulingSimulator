@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Bind the results of a simulation to the log display
+/// </summary>
 public class UpdateLogScreen : MonoBehaviour
 {
     private Text algorithmText;

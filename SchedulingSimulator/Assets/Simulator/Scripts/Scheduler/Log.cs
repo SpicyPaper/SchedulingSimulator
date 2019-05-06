@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Log
+﻿public class Log
 {
     private readonly Statistics stats;
     private readonly Scheduler.Scheduling schedulingType;
@@ -117,21 +113,6 @@ public class Log
                 return "Seed (" + seed + ")";
             }
         }
-    }
-
-    public Color GetAverageScoreColor()
-    {
-        return stats.AverageScoreColor();
-    }
-
-    public Color GetMaxScoreColor()
-    {
-        return stats.MaxScoreColor();
-    }
-
-    public Color GetFinalScoreColor()
-    {
-        return stats.FinalScoreColor();
     }
 
 }
