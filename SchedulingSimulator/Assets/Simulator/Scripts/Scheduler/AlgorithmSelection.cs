@@ -16,12 +16,6 @@ public class AlgorithmSelection : MonoBehaviour
         SelectAlgo(0);        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// Disable all lights by turning them red (by default)
     /// </summary>

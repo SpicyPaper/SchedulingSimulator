@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manage the electrical sparks particle
+/// </summary>
 public class ElectricalSparksHandler : MonoBehaviour
 {
     [SerializeField]
     private CircularSawHandler sawHandler;
-
-    // Update is called once per frame
+    
+    /// <summary>
+    /// Play or stop the particle system when it's needed
+    /// </summary>
     void Update()
     {
         if (sawHandler.IsSawTurning)

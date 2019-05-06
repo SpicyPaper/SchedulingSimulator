@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manage the logic of the pusher
+/// </summary>
 public class PusherLogic : MonoBehaviour
 {
     public float Speed;

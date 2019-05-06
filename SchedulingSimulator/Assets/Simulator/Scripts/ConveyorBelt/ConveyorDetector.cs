@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manage the conveyor belt detector
+/// </summary>
 public class ConveyorDetector : MonoBehaviour
 {
     public bool IsStartDetector;

@@ -57,6 +57,9 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Open the file explorer to import a json file.
+    /// </summary>
     public void OpenExplorer()
     {
         string[] selectedFiles = StandaloneFileBrowser.OpenFilePanel("Open File", "", "json", false);
@@ -92,7 +95,7 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         // Create a json file with process models
-        // CreateTempProcessJsonFile();
+        // CreateProcessJsonFile();
 
         jsonPath = "";
         JsonPathFile.color = Color.blue;
@@ -113,6 +116,9 @@ public class GameHandler : MonoBehaviour
         firstTime = true;
     }
 
+    /// <summary>
+    /// Generate random processes
+    /// </summary>
     public void GeneratorRandomProcesses()
     {
         string seedText = Seed.text;
@@ -201,6 +207,10 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Create a list of process model in json format.
+    /// Used for developers to simplify the creation of json files.
+    /// </summary>
     private void CreateProcessJsonFile()
     {
         ListProcessesModel listProcessModel = new ListProcessesModel();
@@ -356,6 +366,9 @@ public class GameHandler : MonoBehaviour
         Application.Quit();
     }
 
+    /// <summary>
+    /// Destroy all remaining processes.
+    /// </summary>
     public void DestroyProcesses()
     {
         foreach (Transform child in processesObjects.transform)

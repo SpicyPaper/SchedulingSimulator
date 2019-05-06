@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manage the circular saw object.
+/// </summary>
 public class CircularSawHandler : MonoBehaviour
 {
     public int SlotID;
@@ -13,8 +16,11 @@ public class CircularSawHandler : MonoBehaviour
     private bool isSawRotationEnable;
 
     public bool IsSawTurning { get; private set; }
-
-    // Start is called before the first frame update
+    
+    /// <summary>
+    /// Find all children in the general circular saw.
+    /// Init variables
+    /// </summary>
     void Start()
     {
         isSawRotationEnable = false;
@@ -33,6 +39,10 @@ public class CircularSawHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Check if a bloc (process) is on the circular saw
+    /// </summary>
+    /// <returns></returns>
     private bool CheckIfCorrectBlocIsOn()
     {
         RaycastHit rayHit;
@@ -56,7 +66,9 @@ public class CircularSawHandler : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Check if a bloc (process) is on the circular saw and if it's ready to be processed.
+    /// </summary>
     void Update()
     {
         isSawRotationEnable = CheckIfCorrectBlocIsOn();
