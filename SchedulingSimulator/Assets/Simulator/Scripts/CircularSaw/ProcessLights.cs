@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Change the light under the saw depending if the saw is active or not
+/// </summary>
 public class ProcessLights : MonoBehaviour
 {
     public Color OnColor = Color.green;

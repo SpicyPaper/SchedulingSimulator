@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Add an item (a button) to the content of a scrollview
+/// </summary>
 public class AddObjectToList : MonoBehaviour
 {
     public GameObject Content;

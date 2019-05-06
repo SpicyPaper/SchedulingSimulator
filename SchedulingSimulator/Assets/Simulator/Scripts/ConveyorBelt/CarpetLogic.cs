@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used to move a block on a the conveyor belt
+/// </summary>
 public class CarpetLogic : MonoBehaviour
 {
     readonly float Speed = 3;

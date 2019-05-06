@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used to display (deploy) or hide (undeploy) a screen
+/// </summary>
 public class ScreenDisplay : MonoBehaviour
 {
     public int Screen;

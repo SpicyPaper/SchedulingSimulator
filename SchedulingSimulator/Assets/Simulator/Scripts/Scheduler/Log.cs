@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Serves as a holder for a log
+/// </summary>
 public class Log
 {
     private readonly Statistics stats;
@@ -25,6 +28,10 @@ public class Log
         dateTime = System.DateTime.Now;
     }
 
+    /// <summary>
+    /// Get the name of a scheduling type in a readable format
+    /// </summary>
+    /// <returns></returns>
     public string GetSchedulingName()
     {
         switch (schedulingType)
@@ -41,23 +48,39 @@ public class Log
         return "?";
     }
 
+    /// <summary>
+    /// Get the date and time
+    /// </summary>
+    /// <returns></returns>
     public string GetDateAndTime()
     {
         string date = dateTime.Day + "." + dateTime.Month + "." + dateTime.Year;
-        string time = dateTime.Hour + ":" + dateTime.Minute;
+        string time = dateTime.ToShortTimeString();
         return date + " (" + time + ")";
     }
 
+    /// <summary>
+    /// Return the time in a long format (HH:MM:SS)
+    /// </summary>
+    /// <returns></returns>
     public string GetTime()
     {
         return dateTime.ToLongTimeString();
     }
 
+    /// <summary>
+    /// Get the duration of the simulation
+    /// </summary>
+    /// <returns></returns>
     public string GetDuration()
     {
         return duration.ToString("F2") + " seconds";
     }
 
+    /// <summary>
+    /// Get a string indicating whether or not the simulation has been interrupted
+    /// </summary>
+    /// <returns></returns>
     public string GetEndState()
     {
         if (interrupted)
@@ -70,36 +93,64 @@ public class Log
         }
     }
 
+    /// <summary>
+    /// Get the average waiting time
+    /// </summary>
+    /// <returns></returns>
     public string GetAverage()
     {
         return stats.AverageWaitingTime() + " seconds";
     }
 
+    /// <summary>
+    /// Get the average score
+    /// </summary>
+    /// <returns></returns>
     public string GetAverageScore()
     {
         return stats.AverageWaitingTimeScore(duration);
     }
 
+    /// <summary>
+    /// Get the max waiting time
+    /// </summary>
+    /// <returns></returns>
     public string GetMax()
     {
         return stats.MaxWaitingTime() + " seconds";
     }
 
+    /// <summary>
+    /// Get the max waiting score
+    /// </summary>
+    /// <returns></returns>
     public string GetMaxScore()
     {
         return stats.MaxWaitingTimeScore(duration);
     }
 
+    /// <summary>
+    /// Get the final score
+    /// </summary>
+    /// <returns></returns>
     public string GetFinalScore()
     {
         return stats.FinalScore();
     }
 
+    /// <summary>
+    /// Get the simulation speed
+    /// </summary>
+    /// <returns></returns>
     public string GetSpeed()
     {
         return "x" + speed;
     }
 
+    /// <summary>
+    /// Get the source (seed of file)
+    /// </summary>
+    /// <returns></returns>
     public string GetDatasource()
     {
         if (path != "")
@@ -117,21 +168,6 @@ public class Log
                 return "Seed (" + seed + ")";
             }
         }
-    }
-
-    public Color GetAverageScoreColor()
-    {
-        return stats.AverageScoreColor();
-    }
-
-    public Color GetMaxScoreColor()
-    {
-        return stats.MaxScoreColor();
-    }
-
-    public Color GetFinalScoreColor()
-    {
-        return stats.FinalScoreColor();
     }
 
 }

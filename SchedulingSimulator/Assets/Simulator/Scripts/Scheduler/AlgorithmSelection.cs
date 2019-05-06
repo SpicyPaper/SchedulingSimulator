@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used to light up the light under the algorithm button
+/// </summary>
 public class AlgorithmSelection : MonoBehaviour
 {
     public Color OnColor = Color.green;
@@ -14,12 +17,6 @@ public class AlgorithmSelection : MonoBehaviour
     void Start()
     {
         SelectAlgo(0);        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     /// <summary>
